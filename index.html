@@ -163,17 +163,30 @@
         }
 
         /* =========================
-           GAITASUNEN MAILAK (KARRATUAK)
+           GAITASUNEN MAILAK (IKUSKATZEKO KARRATUAK)
         ========================= */
         .maila-karratuak {
             display: flex;
             gap: 4px;
         }
 
-        .maila-karratuak input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
+        .maila-karratua {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #333;
+            background-color: #fff;
+            display: inline-block;
+        }
+
+        .maila-karratua.beteta {
+            background-color: #222;
+        }
+
+        .gaitasun-azpititulua {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 8px;
+            font-style: italic;
         }
 
         /* =========================
@@ -380,6 +393,12 @@
 
         <!-- OINARRIZKO GAITASUNAK -->
         <h3 class="sekzio-titulua">OINARRIZKO GAITASUNAK (Hasierako balioa: Ezaugarria × 2)</h3>
+        <div class="gaitasun-azpititulua">
+            Mailen bonuak eta kategoriak: 
+            <strong>1. maila:</strong> +15 (Hasiberria) | 
+            <strong>2-5 mailak:</strong> +10 bakoitza (Eskarmentatua) | 
+            <strong>6-7 mailak:</strong> +5 bakoitza (Aditua)
+        </div>
         <table>
             <thead>
                 <tr>
@@ -670,48 +689,23 @@
                     const ezaugarriBalioa = balioak[ezaugarriIndizea];
                     const hasierakoBalioa = ezaugarriBalioa * 2; // Ezaugarria x 2
 
-                    // Karratuen HTML-a sortu (7 maila)
-                    let karratuakHTML = `<div class="maila-karratuak" data-gaitasun-index="${index}">`;
+                    // Karratuen HTML-a ikusteko soilik (7 maila, oraingoz hutsik/grisean)
+                    let karratuakHTML = `<div class="maila-karratuak">`;
                     for (let m = 1; m <= 7; m++) {
-                        karratuakHTML += `<input type="checkbox" class="gaitasun-maila-chk" data-maila="${m}" title="${m}. Maila">`;
+                        karratuakHTML += `<span class="maila-karratua" title="${m}. Maila"></span>`;
                     }
                     karratuakHTML += `</div>`;
 
                     oinarrizkoTaula.innerHTML += `
-                        <tr id="gaitasun-errenkada-${index}" data-hasierako="${hasierakoBalioa}">
+                        <tr>
                             <td>${gaitasuna.izena}</td>
                             <td>${ezaugarriak[ezaugarriIndizea]} (${gaitasuna.ezaugarria})</td>
                             <td>${karratuakHTML}</td>
-                            <td><strong class="gaitasun-totala">${hasierakoBalioa}</strong></td>
+                            <td><strong>${hasierakoBalioa}</strong></td>
                         </tr>
                     `;
                 });
-
-                gaitasunMailakEntzun();
             }
-        }
-
-        // Gaitasun mailen karratuen aldaketak kudeatzeko funtzioa
-        function gaitasunMailakEntzun() {
-            document.querySelectorAll('.gaitasun-maila-chk').forEach(chk => {
-                chk.addEventListener('change', (e) => {
-                    const errenkada = e.target.closest('tr');
-                    const hasierako = parseInt(errenkada.getAttribute('data-hasierako'));
-                    const chks = errenkada.querySelectorAll('.gaitasun-maila-chk');
-                    
-                    let bonua = 0;
-                    chks.forEach(c => {
-                        if (c.checked) {
-                            const maila = parseInt(c.getAttribute('data-maila'));
-                            if (maila === 1) bonua += 15;
-                            else if (maila >= 2 && maila <= 5) bonua += 10;
-                            else if (maila >= 6 && maila <= 7) bonua += 5;
-                        }
-                    });
-
-                    errenkada.querySelector('.gaitasun-totala').textContent = hasierako + bonua;
-                });
-            });
         }
 
 
