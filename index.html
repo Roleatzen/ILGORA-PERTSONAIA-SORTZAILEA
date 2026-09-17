@@ -51,7 +51,6 @@
             display: block;
         }
 
-        /* Pausoen adierazlea goian */
         #pausoIndizeak {
             display: flex;
             justify-content: space-between;
@@ -120,6 +119,16 @@
             padding: 8px;
             font-size: 16px;
             min-width: 200px;
+        }
+
+        #leinuDeskribapena {
+            margin-top: 15px;
+            font-style: italic;
+            color: #555;
+            line-height: 1.4;
+            background: #fdfdfd;
+            border-left: 3px solid #666;
+            padding: 10px;
         }
 
         #gizakiAukera {
@@ -198,6 +207,7 @@
 
         .dohain-deskribapena {
             line-height: 1.5;
+            white-space: pre-line;
         }
 
         @media (max-width: 600px) {
@@ -216,11 +226,10 @@
     </header>
 
     <!-- =========================
-         SORTZAILEA (PAUSOGABE / SEKuentziala)
+         SORTZAILEA
     ========================== -->
     <section id="sortzailea">
 
-        <!-- Pausoen egoera ikusteko barra -->
         <div id="pausoIndizeak">
             <div id="indPauso1" class="unekoa">1. Ezaugarriak</div>
             <div id="indPauso2">2. Leinua</div>
@@ -266,7 +275,10 @@
                     <option value="Jentila">Jentila</option>
                 </select>
 
-                <!-- Gizakiaren aukera berezia -->
+                <!-- Leinuen deskribapena kurtsiban (sortzailean soilik) -->
+                <div id="leinuDeskribapena" style="display:none;"></div>
+
+                <!-- Gizakiaren aukera berezia (ezaugarri bat 11ra igo) -->
                 <div id="gizakiAukera">
                     <label for="gizakiEzaugarria">
                         Aukeratu 11 baino txikiagoa den ezaugarria (11ra igotzeko):
@@ -284,7 +296,7 @@
             </div>
         </div>
 
-        <!-- 3. PAUSOA: AMAIERA / LABURPENA -->
+        <!-- 3. PAUSOA: AMAIERA -->
         <div id="pauso3" class="pausoa">
             <h2>Pertsonaia Sortuta!</h2>
             <p>Zure pertsonaia prest dago. Beheko fitxan ikus dezakezu emaitza osoa.</p>
@@ -349,24 +361,19 @@
         ];
 
         let balioak = [];
-        let jatorrizkoBalioak = []; // Atzera egitean jatorrizko tiradak berreskuratzeko
+        let jatorrizkoBalioak = []; 
         let unekoPasua = 1;
         let hautatutakoLeinua = "";
-        let gizakiHautapenaIndizea = null;
 
         function dadoaJaurti() {
             return Math.floor(Math.random() * 6) + 1;
         }
 
-        // Pausoen aldaketa kudeatzeko funtzioa
         function pasuaAldatu(pasuBerria) {
             unekoPasua = pasuBerria;
-
-            // Pauso elementuak ezkutatu/erakutsi
             document.querySelectorAll('.pausoa').forEach(p => p.classList.remove('aktiboa'));
             document.getElementById(`pauso${unekoPasua}`).classList.add('aktiboa');
 
-            // Goiko adierazleak eguneratu
             for (let i = 1; i <= 3; i++) {
                 const ind = document.getElementById(`indPauso${i}`);
                 ind.className = "";
@@ -375,9 +382,7 @@
             }
         }
 
-        /* =========================
-           1. PAUSOA: EZAUGARRIAK SORTU
-        ========================= */
+        /* 1. PAUSOA: EZAUGARRIAK */
         document.getElementById("sortu").addEventListener("click", () => {
             const taula = document.getElementById("Emaitzataula");
             taula.innerHTML = "";
@@ -413,36 +418,55 @@
         });
 
 
-        /* =========================
-           2. PAUSOA: LEINUA
-        ========================= */
+        /* 2. PAUSOA: LEINUA */
         const leinuSelect = document.getElementById("leinuSelect");
 
         leinuSelect.addEventListener("change", () => {
             hautatutakoLeinua = leinuSelect.value;
             document.getElementById("fichaLeinua").textContent = hautatutakoLeinua || "—";
 
-            // Gizakiaren aldaketak hasieratu aldatzean
-            gizakiHautapenaIndizea = null;
-            balioak = [...jatorrizkoBalioak]; // Berrezarri jatorrizkoak
-            pertsonaiaEguneratu();
+            // Berrezarri jatorrizko tiradak aldaketa berriak egin aurretik
+            balioak = [...jatorrizkoBalioak];
 
+            leinuDeskribapenaEguneratu();
+            leinuOndorioakAplikatu();
             gizakiAukeraEguneratu();
             dohaiaEguneratu();
+            pertsonaiaEguneratu();
 
-            // Hurrengo botoia ikusgai jarri leinua aukeratuta badago
+            // Hurrengo botoiaren baimena kudeatu
             const hurrengoa2 = document.getElementById("hurrengoa2");
-            if (hautatutakoLeinua !== "") {
-                if (hautatutakoLeinua === "Gizakia") {
-                    // Gizakia bada, balio bat aukeratu behar du jarraitzeko
-                    hurrengoa2.style.display = "none";
-                } else {
-                    hurrengoa2.style.display = "inline-block";
-                }
-            } else {
+            if (hautatutakoLeinua === "") {
                 hurrengoa2.style.display = "none";
+            } else if (hautatutakoLeinua === "Gizakia") {
+                // Gizakiak ezaugarria hautatu behar du jarraitzeko
+                hurrengoa2.style.display = document.getElementById("gizakiEzaugarria").value !== "" ? "inline-block" : "none";
+            } else {
+                // Elfoa edo besteak aukeratuta jarraitu dezake
+                hurrengoa2.style.display = "inline-block";
             }
         });
+
+        function leinuDeskribapenaEguneratu() {
+            const deskKutxa = document.getElementById("leinuDeskribapena");
+            if (hautatutakoLeinua === "Elfoa") {
+                deskKutxa.style.display = "block";
+                deskKutxa.textContent = "Atari dimentsional batetik etorriak, elfoak beste iratxo askorekin batera gaizki irten zen erritual batengatik iritsi ziren mundura. Jaioterritik bananduta, elfoak, etenik ez duen heriotza eta berraragiztatze ziklo batean harrapaturik aurkitzen dira.";
+            } else {
+                deskKutxa.style.display = "none";
+                deskKutxa.textContent = "";
+            }
+        }
+
+        function leinuOndorioakAplikatu() {
+            // Ezaugarrien indizeak: 
+            // 0: Sendotasuna (SEN), 1: Trebezia, 2: Bizkortasuna (BIZ), 3: Hautematea (HAU), 4: Boterea, 5: Adimena, 6: Karisma
+            if (hautatutakoLeinua === "Elfoa") {
+                balioak[0] -= 2; // SEN -2
+                balioak[2] += 1; // BIZ +1
+                balioak[3] += 2; // HAU +2
+            }
+        }
 
         function gizakiAukeraEguneratu() {
             const gizakiAukera = document.getElementById("gizakiAukera");
@@ -467,14 +491,13 @@
 
         document.getElementById("gizakiEzaugarria").addEventListener("change", (e) => {
             const hautapena = e.target.value;
-            balioak = [...jatorrizkoBalioak]; // Garbitu aurreko aldaketak
+            balioak = [...jatorrizkoBalioak]; // Berrezarri
 
             if (hautapena !== "") {
-                gizakiHautapenaIndizea = parseInt(hautapena);
-                balioak[gizakiHautapenaIndizea] = 11; // 11ra igo
+                const indizea = parseInt(hautapena);
+                balioak[indizea] = 11; // Gizakiaren moldaketa: 11ra igo
                 document.getElementById("hurrengoa2").style.display = "inline-block";
             } else {
-                gizakiHautapenaIndizea = null;
                 document.getElementById("hurrengoa2").style.display = "none";
             }
             pertsonaiaEguneratu();
@@ -489,20 +512,16 @@
         });
 
         document.getElementById("atzera3").addEventListener("click", () => {
-            // Leinua aukeratzera atzera egitean, nahi bada leinua eta bere ondorioak berrabiarazi daitezke
             pasuaAldatu(2);
         });
 
 
-        /* =========================
-           PERTSONAIA ORRIA EGUNERATU
-        ========================= */
+        /* PERTSONAIA ORRIA EGUNERATU */
         function pertsonaiaEguneratu() {
             const fichaTaula = document.getElementById("fichaEzaugarriakGorputza");
             fichaTaula.innerHTML = "";
 
             for (let i = 0; i < ezaugarriak.length; i++) {
-                // Nabarmendu aldatu den ezaugarria (adibidez gizakiaren kasuan)
                 const aldatuta = (balioak[i] !== jatorrizkoBalioak[i]);
                 const estiloa = aldatuta ? 'color: #27ae60; font-weight: bold;' : '';
 
@@ -515,16 +534,18 @@
             }
         }
 
-        /* =========================
-           DOHAINAK
-        ========================= */
+
+        /* DOHAINAK */
         function dohaiaEguneratu() {
             const izena = document.getElementById("dohainIzena");
             const deskribapena = document.getElementById("dohainDeskribapena");
 
-            if (hautatutakoLeinua === "Gizakia") {
-                izena.textContent = "Gizakiaren Dohaina";
-                deskribapena.textContent = "Malgutasuna: Gizakiek 11 baino txikiagoa den ezaugarri bat 11ra igotzeko gaitasuna dute.";
+            if (hautatutakoLeinua === "Elfoa") {
+                izena.textContent = "Berraragiztatzea";
+                deskribapena.textContent = "Kostua: EP 1. Egunean behin\nElfoek ahalegin bat egin dezakete beraien aurreko bizitzak oroitzeko. Hurrengo proban, 1d100 balioa izango duen edozein gaitasun lortuko du.";
+            } else if (hautatutakoLeinua === "Gizakia") {
+                izena.textContent = "Malgutasuna (Gizakia)";
+                deskribapena.textContent = "Gizakiek 11 baino txikiagoa den ezaugarri bat 11ra igotzeko aukera dute.";
             } else if (hautatutakoLeinua === "") {
                 izena.textContent = "—";
                 deskribapena.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
@@ -536,7 +557,6 @@
     </script>
 </body>
 </html>
-
 </body>
 
 </html>
