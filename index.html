@@ -478,7 +478,9 @@
 
             const modifikatzaileak = {
                 Elfoa: { SEN: -2, BIZ: 1, HAU: 2 },
-                Ipotxa: { SEN: 2, BIZ: -2, KAR: -2, BOT: 2 }
+                Ertaina: { SEN: -2, KAR: 3 },
+                Ipotxa: { SEN: 2, BIZ: -2, KAR: -2, BOT: 2 },
+                Jentila: { SEN: 4, ADI: -3, KAR: -2, BOT: 1 }
             };
 
             if (hautatutakoLeinua && modifikatzaileak[hautatutakoLeinua]) {
@@ -505,7 +507,10 @@
                 deskKutxa.textContent = "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak, antzinakoei laguntzean leinu guztiaren arima sakrifikatu zuten. Gertaera horretatik aurrera, belaunaldiz belaunaldi, degeneratuz joan dira. Hala ere, gaur egun oraindik argitasuna mantentzea lortu dute.";
             } else if (hautatutakoLeinua === "Ipotxa") {
                 deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin شدند. Denborarekin helburua ahaztu dute baina haien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira";
+                deskKutxa.textContent = "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin ziren. Denborarekin helburua ahaztu dute baina haien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira";
+            } else if (hautatutakoLeinua === "Ertaina") {
+                deskKutxa.style.display = "block";
+                deskKutxa.textContent = "Inork ez daki ziur nola eta noiz iritsi ziren ertainek hona. Nahiz eta gizakien antzekoak izan, azaldu ezin den sentsazio bat igartzen da beraien ondoan egotean. Zerbait ondo ez dagoenaren sentsazioa. Ertainak mundu osoan zehar zabaldu dira eta zorte izugarri handiko izakien ospea irabazi dute";
             } else {
                 deskKutxa.style.display = "none";
                 deskKutxa.textContent = "";
@@ -517,11 +522,19 @@
                 balioak[0] -= 2; // SEN -2
                 balioak[2] += 1; // BIZ +1
                 balioak[3] += 2; // HAU +2
+            } else if (hautatutakoLeinua === "Ertaina") {
+                balioak[0] -= 2; // SEN -2
+                balioak[6] += 3; // KAR +3
             } else if (hautatutakoLeinua === "Ipotxa") {
                 balioak[0] += 2; // SEN +2
                 balioak[2] -= 2; // BIZ -2
                 balioak[6] -= 2; // KAR -2
                 balioak[4] += 2; // BOT +2
+            } else if (hautatutakoLeinua === "Jentila") {
+                balioak[0] += 4; // SEN +4
+                balioak[5] -= 3; // ADI -3
+                balioak[6] -= 2; // KAR -2
+                balioak[4] += 1; // BOT +1
             }
         }
 
@@ -609,6 +622,9 @@
             } else if (hautatutakoLeinua === "Ipotxa") {
                 izena.textContent = "Nekaezina";
                 deskribapena.textContent = "Kostua: UP 1. Egunean behin\n10 Gogo puntu berreskuratzen dituzu";
+            } else if (hautatutakoLeinua === "Ertaina") {
+                izena.textContent = "Zori Ebasleak";
+                deskribapena.textContent = "Kostua: UP 1. Saio bakoitzean behin.\nAdiskide baten ZP 1 lapurtzen duzu. Momentuan erabili beharko duzu.";
             } else if (hautatutakoLeinua === "") {
                 izena.textContent = "—";
                 deskribapena.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
