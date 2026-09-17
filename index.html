@@ -275,10 +275,10 @@
                     <option value="Jentila">Jentila</option>
                 </select>
 
-                <!-- Leinuen deskribapena kurtsiban (sortzailean soilik) -->
+                <!-- Leinuen deskribapena kurtsiban -->
                 <div id="leinuDeskribapena" style="display:none;"></div>
 
-                <!-- Gizakiaren aukera berezia (ezaugarri bat 11ra igo) -->
+                <!-- Gizakiaren ezaugarri moldaketa berezia -->
                 <div id="gizakiAukera">
                     <label for="gizakiEzaugarria">
                         Aukeratu 11 baino txikiagoa den ezaugarria (11ra igotzeko):
@@ -425,7 +425,6 @@
             hautatutakoLeinua = leinuSelect.value;
             document.getElementById("fichaLeinua").textContent = hautatutakoLeinua || "—";
 
-            // Berrezarri jatorrizko tiradak aldaketa berriak egin aurretik
             balioak = [...jatorrizkoBalioak];
 
             leinuDeskribapenaEguneratu();
@@ -434,15 +433,12 @@
             dohaiaEguneratu();
             pertsonaiaEguneratu();
 
-            // Hurrengo botoiaren baimena kudeatu
             const hurrengoa2 = document.getElementById("hurrengoa2");
             if (hautatutakoLeinua === "") {
                 hurrengoa2.style.display = "none";
             } else if (hautatutakoLeinua === "Gizakia") {
-                // Gizakiak ezaugarria hautatu behar du jarraitzeko
                 hurrengoa2.style.display = document.getElementById("gizakiEzaugarria").value !== "" ? "inline-block" : "none";
             } else {
-                // Elfoa edo besteak aukeratuta jarraitu dezake
                 hurrengoa2.style.display = "inline-block";
             }
         });
@@ -452,6 +448,9 @@
             if (hautatutakoLeinua === "Elfoa") {
                 deskKutxa.style.display = "block";
                 deskKutxa.textContent = "Atari dimentsional batetik etorriak, elfoak beste iratxo askorekin batera gaizki irten zen erritual batengatik iritsi ziren mundura. Jaioterritik bananduta, elfoak, etenik ez duen heriotza eta berraragiztatze ziklo batean harrapaturik aurkitzen dira.";
+            } else if (hautatutakoLeinua === "Gizakia") {
+                deskKutxa.style.display = "block";
+                deskKutxa.textContent = "Munduko leinurik hedatuena da gizakiena. Thandako mendi izoztuetatik Havako desertuetaraino aurkitu daitezke. Antzinakoekin batera izarren artean bidaiatu eta zeruko ateak irekitzerakoan heldu ziren Aendorrera. Gizakiak adoretsuak eta edozein egoeretara moldatzeko iaioak dira.";
             } else {
                 deskKutxa.style.display = "none";
                 deskKutxa.textContent = "";
@@ -459,13 +458,12 @@
         }
 
         function leinuOndorioakAplikatu() {
-            // Ezaugarrien indizeak: 
-            // 0: Sendotasuna (SEN), 1: Trebezia, 2: Bizkortasuna (BIZ), 3: Hautematea (HAU), 4: Boterea, 5: Adimena, 6: Karisma
             if (hautatutakoLeinua === "Elfoa") {
                 balioak[0] -= 2; // SEN -2
                 balioak[2] += 1; // BIZ +1
                 balioak[3] += 2; // HAU +2
             }
+            // Gizakiak ez du estatistika aldaketa finkorik (11ra igotzeko aukera bakarrik du bere mekanika berezian)
         }
 
         function gizakiAukeraEguneratu() {
@@ -491,11 +489,11 @@
 
         document.getElementById("gizakiEzaugarria").addEventListener("change", (e) => {
             const hautapena = e.target.value;
-            balioak = [...jatorrizkoBalioak]; // Berrezarri
+            balioak = [...jatorrizkoBalioak];
 
             if (hautapena !== "") {
                 const indizea = parseInt(hautapena);
-                balioak[indizea] = 11; // Gizakiaren moldaketa: 11ra igo
+                balioak[indizea] = 11; // Gizakiaren ezaugarri-moldaketa
                 document.getElementById("hurrengoa2").style.display = "inline-block";
             } else {
                 document.getElementById("hurrengoa2").style.display = "none";
@@ -544,8 +542,11 @@
                 izena.textContent = "Berraragiztatzea";
                 deskribapena.textContent = "Kostua: EP 1. Egunean behin\nElfoek ahalegin bat egin dezakete beraien aurreko bizitzak oroitzeko. Hurrengo proban, 1d100 balioa izango duen edozein gaitasun lortuko du.";
             } else if (hautatutakoLeinua === "Gizakia") {
-                izena.textContent = "Malgutasuna (Gizakia)";
-                deskribapena.textContent = "Gizakiek 11 baino txikiagoa den ezaugarri bat 11ra igotzeko aukera dute.";
+                izena.textContent = "Ageriko Patua";
+                deskribapena.textContent = "Kostua: ZP 1. Egunean behin\nGizakiak mundua menderatzeko jaio dira. Zure hurrengo proban zuzeneko arrakasta lortuko duzu.";
+                } else if (hautatutakoLeinua === "Jentila") {
+                izena.textContent = "Ustela";
+                deskribapena.textContent = "Kostua: UP 1. Egunean behin\nEdozein jaurtiketa errepikatu dezakezu.";
             } else if (hautatutakoLeinua === "") {
                 izena.textContent = "—";
                 deskribapena.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
