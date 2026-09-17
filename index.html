@@ -36,7 +36,7 @@
         ========================= */
 
         #sortzailea {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto 50px auto;
             background: white;
             border: 1px solid #333;
@@ -100,6 +100,7 @@
         th, td {
             border: 1px solid #333;
             padding: 10px;
+            text-align: left;
         }
 
         th {
@@ -162,11 +163,25 @@
         }
 
         /* =========================
+           GAITASUNEN MAILAK (KARRATUAK)
+        ========================= */
+        .maila-karratuak {
+            display: flex;
+            gap: 4px;
+        }
+
+        .maila-karratuak input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* =========================
            PERTSONAIA ORRIA
         ========================= */
 
         #pertsonaiaOrria {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
             background-color: white;
             border: 2px solid #222;
@@ -364,34 +379,17 @@
         </table>
 
         <!-- OINARRIZKO GAITASUNAK -->
-        <h3 class="sekzio-titulua">OINARRIZKO GAITASUNAK (Ezaugarria × 2)</h3>
+        <h3 class="sekzio-titulua">OINARRIZKO GAITASUNAK (Hasierako balioa: Ezaugarria × 2)</h3>
         <table>
             <thead>
                 <tr>
                     <th>Gaitasuna</th>
                     <th>Lotutako Ezaugarria</th>
-                    <th>Balioa</th>
+                    <th>Mailak (1tik 7ra)</th>
+                    <th>Balio Totala</th>
                 </tr>
             </thead>
             <tbody id="fichaOinarrizkoGaitasunakGorputza">
-            </tbody>
-        </table>
-
-        <!-- GAITASUN PROFESIONALAK -->
-        <h3 class="sekzio-titulua">GAITASUN PROFESIONALAK</h3>
-        <p style="font-size: 14px; color: #555; font-style: italic;">(Hasieran ez dira agertzen; maila bat eskuratzean aktibatuko dira)</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Gaitasun Profesionala / Espezializazioa</th>
-                    <th>Lotutako Ezaugarria</th>
-                    <th>Balioa</th>
-                </tr>
-            </thead>
-            <tbody id="fichaProfesionalaGorputza">
-                <tr>
-                    <td colspan="3" style="text-align: center; color: #777;">Ez dago gaitasun profesionalik aktibatuta.</td>
-                </tr>
             </tbody>
         </table>
 
@@ -445,19 +443,6 @@
             { izena: "ZALDIAK", ezaugarria: "TRE" },
             { izena: "ZORROZTASUNA", ezaugarria: "ADI" }
         ];
-
-        // Gaitasun profesionalak eta espezializazioak
-        const gaitasunProfesionalakZerrenda = {
-            "Alkimia": { ezaugarria: "ADI" },
-            "Erregutu": { ezaugarria: "BOT", espezializazioak: ["Argos", "Nyara", "Maara", "Janos", "Okarî", "Lilith", "Kurgan", "Emril", "Egiaren Hitza"] },
-            "Jakituria": { ezaugarria: "ADI", espezializazioak: ["Magia", "Errunak", "Historia", "Legeak", "Ilgora", "Teologia", "Munstroak", "Landareak", "Animaliak", "Mineralak"] },
-            "Kanalizazioa": { ezaugarria: "BOT" },
-            "Nabigazioa": { ezaugarria: "ADI" },
-            "Ohiturak": { ezaugarria: "ADI", espezializazioak: ["Erresuma Ertainak", "Eleshita", "Dravda", "Muldi", "Skîrota", "Basatarra", "Basha"] },
-            "Osaketa": { ezaugarria: "ADI" },
-            "Suzko Armak": { ezaugarria: "HAU" },
-            "Tolestu": { ezaugarria: "BOT", espezializazioak: ["Transmutazioa", "Xarma", "Elementala", "Inbokazioa", "Gnosis", "Vis", "Entropia", "Zuria"] }
-        };
 
         let balioak = [];
         let jatorrizkoBalioak = []; 
@@ -578,7 +563,7 @@
                 deskKutxa.textContent = "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak, antzinakoei laguntzean leinu guztiaren arima sakrifikatu zuten. Gertaera horretatik aurrera, belaunaldiz belaunaldi, degeneratuz joan dira. Hala ere, gaur egun oraindik argitasuna mantentzea lortu dute.";
             } else if (hautatutakoLeinua === "Ipotxa") {
                 deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin شدند. Denborarekin helburua ahaztu dute baina haien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira";
+                deskKutxa.textContent = "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin ziren. Denborarekin helburua ahaztu dute baina haien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira";
             } else if (hautatutakoLeinua === "Ertaina") {
                 deskKutxa.style.display = "block";
                 deskKutxa.textContent = "Inork ez daki ziur nola eta noiz iritsi ziren ertainek hona. Nahiz eta gizakien antzekoak izan, azaldu ezin den sentsazio bat igartzen da beraien ondoan egotean. Zerbait ondo ez dagoenaren sentsazioa. Ertainak mundu osoan zehar zabaldu dira eta zorte izugarri handiko izakien ospea irabazi dute";
@@ -680,20 +665,53 @@
             oinarrizkoTaula.innerHTML = "";
 
             if (balioak.length > 0) {
-                oinarrizkoGaitasunakZerrenda.forEach(gaitasuna => {
+                oinarrizkoGaitasunakZerrenda.forEach((gaitasuna, index) => {
                     const ezaugarriIndizea = ezaugarriLaburdurak[gaitasuna.ezaugarria];
                     const ezaugarriBalioa = balioak[ezaugarriIndizea];
-                    const gaitasunBalioa = ezaugarriBalioa * 2; // Ezaugarria x 2
+                    const hasierakoBalioa = ezaugarriBalioa * 2; // Ezaugarria x 2
+
+                    // Karratuen HTML-a sortu (7 maila)
+                    let karratuakHTML = `<div class="maila-karratuak" data-gaitasun-index="${index}">`;
+                    for (let m = 1; m <= 7; m++) {
+                        karratuakHTML += `<input type="checkbox" class="gaitasun-maila-chk" data-maila="${m}" title="${m}. Maila">`;
+                    }
+                    karratuakHTML += `</div>`;
 
                     oinarrizkoTaula.innerHTML += `
-                        <tr>
+                        <tr id="gaitasun-errenkada-${index}" data-hasierako="${hasierakoBalioa}">
                             <td>${gaitasuna.izena}</td>
                             <td>${ezaugarriak[ezaugarriIndizea]} (${gaitasuna.ezaugarria})</td>
-                            <td><strong>${gaitasunBalioa}</strong></td>
+                            <td>${karratuakHTML}</td>
+                            <td><strong class="gaitasun-totala">${hasierakoBalioa}</strong></td>
                         </tr>
                     `;
                 });
+
+                gaitasunMailakEntzun();
             }
+        }
+
+        // Gaitasun mailen karratuen aldaketak kudeatzeko funtzioa
+        function gaitasunMailakEntzun() {
+            document.querySelectorAll('.gaitasun-maila-chk').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const errenkada = e.target.closest('tr');
+                    const hasierako = parseInt(errenkada.getAttribute('data-hasierako'));
+                    const chks = errenkada.querySelectorAll('.gaitasun-maila-chk');
+                    
+                    let bonua = 0;
+                    chks.forEach(c => {
+                        if (c.checked) {
+                            const maila = parseInt(c.getAttribute('data-maila'));
+                            if (maila === 1) bonua += 15;
+                            else if (maila >= 2 && maila <= 5) bonua += 10;
+                            else if (maila >= 6 && maila <= 7) bonua += 5;
+                        }
+                    });
+
+                    errenkada.querySelector('.gaitasun-totala').textContent = hasierako + bonua;
+                });
+            });
         }
 
 
