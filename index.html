@@ -17,10 +17,6 @@
             color: #222;
         }
 
-        /* -------------------------
-           GOIBURUA
-        ------------------------- */
-
         header {
             text-align: center;
             margin-bottom: 40px;
@@ -40,9 +36,9 @@
         }
 
 
-        /* -------------------------
+        /* =========================
            SORTZAILEA
-        ------------------------- */
+        ========================= */
 
         #sortzailea {
             max-width: 900px;
@@ -56,7 +52,6 @@
             cursor: pointer;
             margin-bottom: 25px;
         }
-
 
         table {
             margin: 20px auto;
@@ -77,9 +72,36 @@
         }
 
 
-        /* -------------------------
+        /* =========================
+           LEINUA AUKERATU
+        ========================= */
+
+        #leinuAukeraketa {
+            background-color: white;
+            border: 1px solid #333;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        #leinuAukeraketa h3 {
+            margin-top: 0;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 16px;
+            min-width: 200px;
+        }
+
+        #gizakiAukera {
+            margin-top: 20px;
+            display: none;
+        }
+
+
+        /* =========================
            PERTSONAIA ORRIA
-        ------------------------- */
+        ========================= */
 
         #pertsonaiaOrria {
             max-width: 900px;
@@ -99,11 +121,9 @@
         }
 
 
-        /* Leinua eta ezaugarriak */
-
         .ficha-goiburua {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -125,18 +145,39 @@
         }
 
 
-        /* Ezaugarriak */
+        /* =========================
+           DOHAINAK
+        ========================= */
 
-        #fichaEzaugarriak {
-            width: 100%;
+        #dohainak {
+            margin-top: 30px;
         }
 
-        #fichaEzaugarriak th {
-            background-color: #444;
+        #dohainak h3 {
+            border-bottom: 2px solid #222;
+            padding-bottom: 8px;
+        }
+
+        .dohain-kutxa {
+            border: 1px solid #333;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .dohain-izena {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .dohain-deskribapena {
+            line-height: 1.5;
         }
 
 
-        /* Pantaila txikietan */
+        /* =========================
+           MOBILE
+        ========================= */
 
         @media (max-width: 600px) {
 
@@ -154,10 +195,6 @@
 
             #pertsonaiaOrria {
                 padding: 15px;
-            }
-
-            .ficha-goiburua {
-                grid-template-columns: 1fr;
             }
 
         }
@@ -192,10 +229,72 @@
 
         <h2>Ezaugarriak (3d6)</h2>
 
+
         <button id="sortu">
             Sortu
         </button>
 
+
+        <!-- LEINUA -->
+
+        <div id="leinuAukeraketa">
+
+            <h3>Leinua</h3>
+
+            <select id="leinuSelect">
+
+                <option value="">
+                    Aukeratu leinua
+                </option>
+
+                <option value="Gizakia">
+                    Gizakia
+                </option>
+
+                <option value="Elfoa">
+                    Elfoa
+                </option>
+
+                <option value="Ertaina">
+                    Ertaina
+                </option>
+
+                <option value="Ipotxa">
+                    Ipotxa
+                </option>
+
+                <option value="Jentila">
+                    Jentila
+                </option>
+
+            </select>
+
+
+            <!-- Gizakiaren aukera berezia -->
+
+            <div id="gizakiAukera">
+
+                <label for="gizakiEzaugarria">
+                    Aukeratu 11 baino txikiagoa den ezaugarria:
+                </label>
+
+                <br><br>
+
+                <select id="gizakiEzaugarria">
+
+                    <option value="">
+                        Aukeratu ezaugarria
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- EZaugarriak -->
 
         <table>
 
@@ -231,7 +330,7 @@
         <h2>ILGORA - PERTSONAIA</h2>
 
 
-        <!-- Leinua -->
+        <!-- LEINUA -->
 
         <div class="ficha-goiburua">
 
@@ -253,9 +352,9 @@
 
 
 
-        <!-- Ezaugarriak -->
+        <!-- EZAUGARRIAK -->
 
-        <table id="fichaEzaugarriak">
+        <table>
 
             <thead>
 
@@ -274,6 +373,32 @@
         </table>
 
 
+
+        <!-- DOHAINAK -->
+
+        <div id="dohainak">
+
+            <h3>DOHAINAK</h3>
+
+            <div class="dohain-kutxa">
+
+                <div
+                    class="dohain-izena"
+                    id="dohainIzena">
+                    —
+                </div>
+
+                <div
+                    class="dohain-deskribapena"
+                    id="dohainDeskribapena">
+                    Aukeratu leinu bat dohaia hemen agertzeko.
+                </div>
+
+            </div>
+
+        </div>
+
+
     </section>
 
 
@@ -283,6 +408,11 @@
     ========================== -->
 
     <script>
+
+
+        /* =========================
+           EZAUGARRIAK
+        ========================== */
 
         const ezaugarriak = [
 
@@ -298,8 +428,16 @@
 
 
         /*
-         * Dado bat jaurti
+         * Uneko pertsonaiaren balioak
          */
+
+        let balioak = [];
+
+
+
+        /* =========================
+           DADOA
+        ========================== */
 
         function dadoaJaurti() {
 
@@ -309,9 +447,9 @@
 
 
 
-        /*
-         * Ezaugarriak sortu
-         */
+        /* =========================
+           TIRADAK
+        ========================== */
 
         function tiradakSortu() {
 
@@ -324,17 +462,12 @@
                 );
 
 
-            // Aurreko emaitzak ezabatu
-
             taula.innerHTML = "";
-
             fichaTaula.innerHTML = "";
 
 
+            balioak = [];
 
-            /*
-             * 7 ezaugarriak
-             */
 
             for (
                 let i = 0;
@@ -350,10 +483,8 @@
                     dado1 + dado2 + dado3;
 
 
+                balioak.push(guztira);
 
-                /*
-                 * Sortzaileko taula
-                 */
 
                 taula.innerHTML += `
 
@@ -385,11 +516,37 @@
 
                 `;
 
+            }
 
 
-                /*
-                 * Pertsonaia-orriko taula
-                 */
+            pertsonaiaEguneratu();
+
+            gizakiAukeraEguneratu();
+
+        }
+
+
+
+        /* =========================
+           PERTSONAIA ORRIA
+        ========================== */
+
+        function pertsonaiaEguneratu() {
+
+            const fichaTaula =
+                document.getElementById(
+                    "fichaEzaugarriakGorputza"
+                );
+
+
+            fichaTaula.innerHTML = "";
+
+
+            for (
+                let i = 0;
+                i < ezaugarriak.length;
+                i++
+            ) {
 
                 fichaTaula.innerHTML += `
 
@@ -401,7 +558,7 @@
 
                         <td>
                             <strong>
-                                ${guztira}
+                                ${balioak[i]}
                             </strong>
                         </td>
 
@@ -415,9 +572,237 @@
 
 
 
+        /* =========================
+           LEINUA
+        ========================== */
+
+        const leinuSelect =
+            document.getElementById("leinuSelect");
+
+
+        leinuSelect.addEventListener(
+            "change",
+            leinuaAldatu
+        );
+
+
+        function leinuaAldatu() {
+
+            const leinua =
+                leinuSelect.value;
+
+
+            document.getElementById(
+                "fichaLeinua"
+            ).textContent =
+                leinua || "—";
+
+
+            /*
+             * Gizakia aukeratzen bada,
+             * bere aukera erakutsi.
+             */
+
+            gizakiAukeraEguneratu();
+
+
+            /*
+             * Dohaina
+             */
+
+            dohaiaEguneratu();
+
+        }
+
+
+
+        /* =========================
+           GIZAKIA
+        ========================== */
+
+        function gizakiAukeraEguneratu() {
+
+            const gizakiAukera =
+                document.getElementById(
+                    "gizakiAukera"
+                );
+
+
+            const gizakiEzaugarria =
+                document.getElementById(
+                    "gizakiEzaugarria"
+                );
+
+
+            /*
+             * Ez badago tiradarik,
+             * ez dugu aukerarik erakusten.
+             */
+
+            if (
+                leinuSelect.value !== "Gizakia" ||
+                balioak.length === 0
+            ) {
+
+                gizakiAukera.style.display = "none";
+
+                return;
+
+            }
+
+
+            gizakiAukera.style.display = "block";
+
+
+            /*
+             * Aukerak garbitu
+             */
+
+            gizakiEzaugarria.innerHTML = `
+
+                <option value="">
+                    Aukeratu ezaugarria
+                </option>
+
+            `;
+
+
+            /*
+             * 11 baino txikiagoak direnak
+             */
+
+            for (
+                let i = 0;
+                i < balioak.length;
+                i++
+            ) {
+
+                if (balioak[i] < 11) {
+
+                    gizakiEzaugarria.innerHTML += `
+
+                        <option value="${i}">
+                            ${ezaugarriak[i]}
+                            (${balioak[i]})
+                        </option>
+
+                    `;
+
+                }
+
+            }
+
+        }
+
+
+
         /*
-         * Sortu botoia
+         * Gizakiak ezaugarria aukeratzen du
          */
+
+        document
+            .getElementById("gizakiEzaugarria")
+            .addEventListener(
+                "change",
+                gizakiarenAukera
+            );
+
+
+        function gizakiarenAukera() {
+
+            const hautapena =
+                document.getElementById(
+                    "gizakiEzaugarria"
+                ).value;
+
+
+            if (hautapena === "") {
+                return;
+            }
+
+
+            const indizea =
+                parseInt(hautapena);
+
+
+            /*
+             * 11ra igo
+             */
+
+            balioak[indizea] = 11;
+
+
+            /*
+             * Ficha eguneratu
+             */
+
+            pertsonaiaEguneratu();
+
+        }
+
+
+
+        /* =========================
+           DOHAINAK
+        ========================== */
+
+        function dohaiaEguneratu() {
+
+            const leinua =
+                leinuSelect.value;
+
+
+            const izena =
+                document.getElementById(
+                    "dohainIzena"
+                );
+
+            const deskribapena =
+                document.getElementById(
+                    "dohainDeskribapena"
+                );
+
+
+            /*
+             * Oraingoz Gizakiarena bakarrik
+             */
+
+            if (leinua === "Gizakia") {
+
+                izena.textContent =
+                    "Dohaina";
+
+                deskribapena.textContent =
+                    "Gizakiaren dohainaren mekanika hemen azalduko da.";
+
+            }
+
+            else if (leinua === "") {
+
+                izena.textContent = "—";
+
+                deskribapena.textContent =
+                    "Aukeratu leinu bat dohaia hemen agertzeko.";
+
+            }
+
+            else {
+
+                izena.textContent =
+                    "Dohaina";
+
+                deskribapena.textContent =
+                    "Leinu honen dohainaren mekanika zehazteke dago.";
+
+            }
+
+        }
+
+
+
+        /* =========================
+           SORTU BOTOIA
+        ========================== */
 
         document
             .getElementById("sortu")
@@ -427,7 +812,6 @@
             );
 
     </script>
-
 
 </body>
 
