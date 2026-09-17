@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Pertsonaia Sortzailea</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,9 +36,11 @@
         }
     </style>
 </head>
+
 <body>
 
     <h1>Ezaugarriak (3d6)</h1>
+
     <button onclick="Tiradajaurtiketa()">Sortu</button>
 
     <table>
@@ -50,46 +53,57 @@
                 <th>Denera</th>
             </tr>
         </thead>
+
         <tbody id="Emaitzataula">
         </tbody>
     </table>
 
-<script>
-function Tiradajaurtiketa() {
-    return Math.floor(Math.random() * 6) + 1;
-}
+    <script>
 
-function Tiradajaurtieta() {
+        function Dadojaurtiketa() {
+            return Math.floor(Math.random() * 6) + 1;
+        }
 
-    const ezaugarriak = [
-        "Sendotasuna", "Trebezia", "Bizkortasuna", "Hautematea",
-        "Boterea", "Adimena", "Karisma"
-    ];
 
-    const tabla = document.getElementById("Emaitzataula");
-    tabla.innerHTML = "";
+        function Tiradajaurtiketa() {
 
-    for (let i = 0; i < 7; i++) {
+            const ezaugarriak = [
+                "Sendotasuna",
+                "Trebezia",
+                "Bizkortasuna",
+                "Hautematea",
+                "Boterea",
+                "Adimena",
+                "Karisma"
+            ];
 
-        let dado1 = Tiradajaurtiketa();
-        let dado2 = Tiradajaurtiketa();
-        let dado3 = Tiradajaurtiketa();
-        let total = dado1 + dado2 + dado3;
+            const tabla = document.getElementById("Emaitzataula");
 
-        let fila = `
-            <tr>
-                <td>${ezaugarriak[i]}</td>
-                <td>${dado1}</td>
-                <td>${dado2}</td>
-                <td>${dado3}</td>
-                <td><strong>${total}</strong></td>
-            </tr>
-        `;
+            tabla.innerHTML = "";
 
-        tabla.innerHTML += fila;
-    }
-}
-</script>
+            for (let i = 0; i < 7; i++) {
+
+                let dado1 = Dadojaurtiketa();
+                let dado2 = Dadojaurtiketa();
+                let dado3 = Dadojaurtiketa();
+
+                let total = dado1 + dado2 + dado3;
+
+                let fila = `
+                    <tr>
+                        <td>${ezaugarriak[i]}</td>
+                        <td>${dado1}</td>
+                        <td>${dado2}</td>
+                        <td>${dado3}</td>
+                        <td><strong>${total}</strong></td>
+                    </tr>
+                `;
+
+                tabla.innerHTML += fila;
+            }
+        }
+
+    </script>
 
 </body>
 </html>
