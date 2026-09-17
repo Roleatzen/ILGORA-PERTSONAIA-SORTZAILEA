@@ -448,6 +448,21 @@
             </tbody>
         </table>
 
+        <!-- GAITASUN PROFESIONALAK ETA BESTELAKOAK -->
+        <h3 class="sekzio-titulua">BESTELAKO GAITASUNAK (Jatorrizkoak)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Gaitasuna</th>
+                    <th>Lotutako Ezaugarria</th>
+                    <th>Mailak (1tik 7ra)</th>
+                    <th>Balio Totala</th>
+                </tr>
+            </thead>
+            <tbody id="fichaBestelakoGaitasunakGorputza">
+            </tbody>
+        </table>
+
         <!-- DOHAINAK -->
         <h3 class="sekzio-titulua">DOHAINAK</h3>
         <div class="dohain-kutxa">
@@ -512,7 +527,7 @@
                 onartutakoLeinuak: ["Ertaina"],
                 deskribapena: "Uda Hirietan eleshiten merkataritza etxe handiek negozio guztiak bereganatu dituzte. Honen aurrean, familia aberatsen bigarren seme-alaba askok, hiri-estatuak utzi eta Vasantara bidaiatzen dute negozio aukera berrien bila.\n\nErresuma Ertainetako hiri gehienetan, banku, diru-mailegu eta merkataritzan diharduten komunitate eleshita oparo bat aurkitu daiteke. Bere baliabideak direla eta, noblezia eta bertako burgesekin lotura sendoak dituzte eta eragin politiko handiko etorkinak dira.",
                 dohainak: [
-                    { izena: "Malkarrak zelaitzen", desk: "Kostua: Istorioan behin\nDiruak malkarrak zelaitzen omen ditu. Zuk aukeratutako eta etsaia ez den PEJ oparo edo boteretsu baten jarrera +30 aldatzen da." },
+                    { izena: "Malkarrak zelaitzen", desk: "Kostua: Istorioan behin\nDiruak malkarrak zelaitzen omen ditu. Zuk aukeratutako eta etsaia ez den PEJ oparoa edo boteretsu baten jarrera +30 aldatzen da." },
                     { izena: "Uda Hirietako Sendia", desk: "Kostua: Istorian behin\nIstorian behin Uda Hirietako merkatal famili handiekin lotura duen PEJ bat probarik egin gabe sortu ahalko duzu." }
                 ],
                 gaitasunak: [
@@ -522,6 +537,11 @@
                     { gIndizea: 1, maila: 1 },   // ARTISAUTZA
                     { gIndizea: 10, maila: 1 },  // ESKU JOKOA
                     { gIndizea: 17, maila: 1 }   // ZALDIAK
+                ],
+                bestelakoGaitasunak: [
+                    { izena: "Ohiturak (Eleshita)", ezaugarria: "ADI", maila: 4 },
+                    { izena: "Ohiturak (Erresuma Ertainak)", ezaugarria: "ADI", maila: 2 },
+                    { izena: "Jakituria (Legeak)", ezaugarria: "ADI", maila: 1 }
                 ]
             }
         ];
@@ -856,6 +876,45 @@
                     `;
                 });
             }
+
+            // BESTELAKO GAITASUNAK (JATORRIZKOAK) EGUNERATU
+            const bestelakoTaula = document.getElementById("fichaBestelakoGaitasunakGorputza");
+            bestelakoTaula.innerHTML = "";
+
+            if (hautatutakoJatorriaObj && hautatutakoJatorriaObj.bestelakoGaitasunak) {
+                hautatutakoJatorriaObj.bestelakoGaitasunak.forEach(gaitasuna => {
+                    const ezaugarriIndizea = ezaugarriLaburdurak[gaitasuna.ezaugarria] !== undefined ? ezaugarriLaburdurak[gaitasuna.ezaugarria] : 5;
+                    const ezaugarriBalioa = balioak[ezaugarriIndizea];
+
+                    let balioTotala = ezaugarriBalioa * 2;
+                    const mailaKopurua = gaitasuna.maila;
+
+                    for (let m = 1; m <= mailaKopurua; m++) {
+                        if (m === 1) balioTotala += 15;
+                        else if (m === 2) balioTotala += 10;
+                        else if (m >= 3 && m <= 5) balioTotala += 10;
+                        else if (m >= 6 && m <= 7) balioTotala += 5;
+                    }
+
+                    let karratuakHTML = `<div class="maila-karratuak">`;
+                    for (let m = 1; m <= 7; m++) {
+                        const betetaClass = m <= mailaKopurua ? "beteta" : "";
+                        karratuakHTML += `<span class="maila-karratua ${betetaClass}" title="${m}. Maila"></span>`;
+                    }
+                    karratuakHTML += `</div>`;
+
+                    bestelakoTaula.innerHTML += `
+                        <tr>
+                            <td>${gaitasuna.izena}</td>
+                            <td>${ezaugarriak[ezaugarriIndizea]} (${gaitasuna.ezaugarria})</td>
+                            <td>${karratuakHTML}</td>
+                            <td><strong>${balioTotala}</strong></td>
+                        </tr>
+                    `;
+                });
+            } else {
+                bestelakoTaula.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #777;">Aukeratu jatorri bat gaitasun profesional eta bereziak ikusteko.</td></tr>`;
+            }
         }
 
 
@@ -873,6 +932,12 @@
             } else if (hautatutakoLeinua === "Ertaina") {
                 izena.textContent = "Zori Ebasleak";
                 deskribapena.textContent = "Kostua: UP 1. Saio bakoitzean behin.\nAdiskide baten ZP 1 lapurtzen duzu. Momentuan erabili beharko duzu.";
+            } else if (hautatutakoLeinua === "Jentila") {
+                izena.textContent = "Ustela";
+                deskribapena.textContent = "Kostua: Ekintza bat / Pasiboa\nJentilen ondare ilunak ingurukoen izpiritua edo morala ahultzen du. Egoera jakin batzuetan etsaien ekintzak baldintzatzeko balio du.";
+            } else if (hautatutakoLeinua === "Ipotxa") {
+                izena.textContent = "Nekaezina";
+                deskribapena.textContent = "Kostua: Pasiboa / Nekea murrizteko\nIpotxek egindako gorputz-ahalegin luzeek ez dute horrenbeste zigortzen. Nekea metatzean hobeto eusten diote lanari edo martxari.";
             } else {
                 izena.textContent = "—";
                 deskribapena.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
