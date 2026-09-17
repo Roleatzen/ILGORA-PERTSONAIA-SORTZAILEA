@@ -431,9 +431,9 @@
         <h3 class="sekzio-titulua">OINARRIZKO GAITASUNAK (Hasierako balioa: Ezaugarria × 2)</h3>
         <div class="gaitasun-azpititulua">
             Mailen bonuak eta kategoriak: 
-            <strong>1. maila:</strong> +15 (Hasiberria) | 
-            <strong>2-5 mailak:</strong> +10 bakoitza (Eskarmentatua) | 
-            <strong>6-7 mailak:</strong> +5 bakoitza (Aditua)
+            <strong>1-2 mailak (Hasiberria):</strong> +15 lehenengoak, +10 bigarrenak | 
+            <strong>3-5 mailak (Eskarmentatua):</strong> +10 bakoitza | 
+            <strong>6-7 mailak (Aditua):</strong> +5 bakoitza
         </div>
         <table>
             <thead>
@@ -501,7 +501,6 @@
             { izena: "SAIHESTU", ezaugarria: "BIZ" },
             { izena: "ZALDIAK", ezaugarria: "TRE" },
             { izena: "ZORROZTASUNA", ezaugarria: "ADI" },
-            // Jatorri/beste elementuetarako gehigarriak zerrendaren amaieran:
             { izena: "OHITURAK (ELESHITA)", ezaugarria: "KAR" },
             { izena: "OHITURAK (ERRESUMA ERTAINETAKO BAT)", ezaugarria: "KAR" },
             { izena: "JAKITURIA (LEGEAK)", ezaugarria: "ADI" }
@@ -519,7 +518,6 @@
                     { izena: "Malkarrak zelaitzen", desk: "Kostua: Istorioan behin\nDiruak malkarrak zelaitzen omen ditu. Zuk aukeratutako eta etsaia ez den PEJ oparo edo boteretsu baten jarrera +30 aldatzen da." },
                     { izena: "Uda Hirietako Sendia", desk: "Kostua: Istorian behin\nIstorian behin Uda Hirietako merkatal famili handiekin lotura duen PEJ bat probarik egin gabe sortu ahalko duzu." }
                 ],
-                // Ohiturak (Eleshita) indizea: 19, Ohiturak (Erresuma Ertainetako bat): 20, Merkataritza: 15, Artisautza: 1, Iruzur egin: 11, Zorroztasuna: 18, Jakituria (Legeak): 21
                 gaitasunak: [
                     { gIndizea: 19, maila: 4 },
                     { gIndizea: 20, maila: 2 },
@@ -662,7 +660,7 @@
                 Gizakia: "Munduko leinurik hedatuena da gizakiena. Thandako mendi izoztuetatik Havako desertuetaraino aurkitu daitezke.",
                 Jentila: "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak.",
                 Ipotxa: "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin ziren.",
-                Ertaina: "Inork ez daki ziur nola eta noiz iritsi ziren ertainek hona. Nahiz eta gizakien antzekoak izan, zorte izugarria dute."
+                Ertaina: "Inork ez daki ziur nola eta noiz iritsi ziren ertainek hona. Nahiz eta gizakien antzekoak izan, azaldu ezin den sentsazio bat igartzen da beraien ondoan egotean. Zerbait ondo ez dagoenaren sentsazioa. Ertainak mundu osoan zehar zabaldu dira eta zorte izugarri handiko izakien ospea irabazi dute."
             };
 
             if (deskribapenak[hautatutakoLeinua]) {
@@ -832,7 +830,7 @@
 
             if (balioak.length > 0) {
                 oinarrizkoGaitasunakZerrenda.forEach((gaitasuna, index) => {
-                    const ezaugarriIndizea = ezaugarriLaburdurak[gaitasuna.ezaugarria] !== undefined ? ezaugarriLaburdurak[gaitasuna.ezaugarria] : 6; // Defektuz Karisma ezaugarria erabili berezirako
+                    const ezaugarriIndizea = ezaugarriLaburdurak[gaitasuna.ezaugarria] !== undefined ? ezaugarriLaburdurak[gaitasuna.ezaugarria] : 6; 
                     const ezaugarriBalioa = balioak[ezaugarriIndizea];
                     
                     let balioTotala = ezaugarriBalioa * 2;
@@ -840,7 +838,8 @@
 
                     for (let m = 1; m <= mailaKopurua; m++) {
                         if (m === 1) balioTotala += 15;
-                        else if (m >= 2 && m <= 5) balioTotala += 10;
+                        else if (m === 2) balioTotala += 10;
+                        else if (m >= 3 && m <= 5) balioTotala += 10;
                         else if (m >= 6 && m <= 7) balioTotala += 5;
                     }
 
