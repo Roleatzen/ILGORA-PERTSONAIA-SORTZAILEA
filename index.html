@@ -146,20 +146,20 @@
             "Elfoa": "Atari dimentsional batetik etorriak, elfoak beste iratxo askorekin batera gaizki irten zen erritual batengatik iritsi ziren mundura. Jaioterritik bananduta, elfoak, etenik ez duen heriotza eta berraragiztatze ziklo batean harrapaturik aurkitzen dira.",
             "Ipotxa": "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin ziren. Denborarekin helburua ahaztu dute baina haien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira.",
             "Ertaina": "Inork ez daki ziur nola eta noiz iritsi ziren ertainek hona. Nahiz eta gizakien antzekoak izan, azaldu ezin den sentsazio bat igartzen da beraien ondoan egotean. Zerbait ondo ez dagoenaren sentsazioa. Ertainak mundu osoan zehar zabaldu dira eta zorte izugarri handiko izakien ospea irabazi dute.",
-            "Jentila": "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak, antzinakoei laguntzean leinu guztiaren arima sakrifikatu zuten. Gertaera horretatik aurrera, belaunaldiz belaunaldi, degeneratuz joan dira. Hala ere, gaur egun oraindik argitasuna mantentzea lortu dute."
+            "Jentila": "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak, antzinakoei laguntzean leinu guztiaren arima sakrifikatu zuten. Gertaera horretatik aurrera, belaunaldihez belaunaldi, degeneratuz joan dira. Hala ere, gaur egun oraindik argitasuna mantentzea lortu dute."
         };
 
         const jatorriDeskribapenak = {
             "Diaspora Eleshita": "Uda Hirietan eleshiten merkataritza etxe handiek negozio guztiak bereganatu tulite. Honen aurrean, familia aberatsen bigarren seme-alaba askok, hiri-estatuak utzi eta Vasantara bidaiatzen dute negozio aukera berrien bila. Erresuma Ertainetako hiri gehienetan, banku, diru-mailegu eta merkataritzan diharduten komunitate eleshita oparo bat aurkitu daiteke. Bere baliabideak direla eta, noblezia eta bertako burgesekin lotura sendoak dituzte eta eragin politiko handiko etorkinak dira."
         };
 
-        function 3d6Botatzea() {
+        function botatu3d6() {
             return Math.floor(Math.random() * 6) + 1 + Math.floor(Math.random() * 6) + 1 + Math.floor(Math.random() * 6) + 1;
         }
 
         function sortuEzaugarriak() {
             for (let i = 0; i < 7; i++) {
-                let val = 3d6Botatzea();
+                let val = botatu3d6();
                 jatorrizkoBalioak[i] = val;
                 balioak[i] = val;
             }
@@ -170,9 +170,8 @@
 
         function leinuaAukeratu(leinua) {
             hautatutakoLeinua = leinua;
-            balioak = [...jatorrizkoBalioak]; // Berrezarri lehenago
+            balioak = [...jatorrizkoBalioak]; // Berrezarri jatorrizkoetatik
 
-            // Leinuen aldaketak aplikatu
             if (leinua === "Elfoa") {
                 balioak[0] -= 2; // SEN
                 balioak[2] += 1; // BIZ
@@ -289,15 +288,12 @@
         }
 
         function pertsonaiaEguneratu() {
-            // Leinua eta Deskribapena
             document.getElementById("fichaLeinua").textContent = hautatutakoLeinua || "Hautatu gabe";
-            document.getElementById("fichaLeinuaDesk.textContent = leinuDeskribapenak[hautatutakoLeinua] || "";
+            document.getElementById("fichaLeinuaDesk").textContent = leinuDeskribapenak[hautatutakoLeinua] || "";
 
-            // Jatorria eta Deskribapena
             document.getElementById("fichaJatorria").textContent = hautatutakoJatorria || "Hautatu gabe";
             document.getElementById("fichaJatorriaDesk").textContent = jatorriDeskribapenak[hautatutakoJatorria] || "";
 
-            // Ezaugarriak taula
             let ezaugarriHtml = "";
             for (let i = 0; i < ezaugarriak.length; i++) {
                 ezaugarriHtml += `<tr>
@@ -308,7 +304,6 @@
             }
             document.getElementById("fichaEzaugarriakTxa").innerHTML = ezaugarriHtml;
 
-            // Oinarrizko Gaitasunak (Ezaugarria x 2)
             let gaitasunHtml = `
                 <tr><td>ARRETA (HAU)</td><td>${balioak[3] * 2}</td></tr>
                 <tr><td>ARTISAUTZA (TRE)</td><td>${balioak[1] * 2}</td></tr>
@@ -331,7 +326,6 @@
                 <tr><td>ZORROZTASUNA (ADI)</td><td>${balioak[5] * 2}</td></tr>
             `;
 
-            // Diaspora Eleshita jatorriak emandako gaitasun profesionalak (hasierako mailak)
             if (hautatutakoJatorria === "Diaspora Eleshita") {
                 gaitasunHtml += `
                     <tr><td>Ohiturak (Eleshita)</td><td>4 Maila</td></tr>
@@ -346,7 +340,6 @@
 
             document.getElementById("fichaGaitasunakTxa").innerHTML = gaitasunHtml;
 
-            // Dohainak
             let dohainenHtml = "";
             if (hautatutakoLeinua === "Ipotxa") {
                 dohainenHtml += `<p><strong>Nekaezina (Ipotxa Dohaina):</strong> Kostua: UP 1. Egunean behin 10 Gogo puntu berreskuratzen dituzu.</p>`;
@@ -366,7 +359,6 @@
             document.getElementById("fichaDohainak").innerHTML = dohainenHtml;
         }
 
-        // Hasi interfazea
         interfazaMarraztu();
         pertsonaiaEguneratu();
     </script>
