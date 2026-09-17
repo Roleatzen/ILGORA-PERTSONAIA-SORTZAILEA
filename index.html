@@ -478,9 +478,7 @@
 
             const modifikatzaileak = {
                 Elfoa: { SEN: -2, BIZ: 1, HAU: 2 },
-                Ertaina: { Bizkortasuna: 2, Sendotasuna: -1 },
-                Ipotxa: { Sendotasuna: 2, Karisma: -1 },
-                Jentila: { Sendotasuna: 3, Adimena: -2 }
+                Ipotxa: { SEN: 2, BIZ: -2, KAR: -2, BOT: 2 }
             };
 
             if (hautatutakoLeinua && modifikatzaileak[hautatutakoLeinua]) {
@@ -507,10 +505,7 @@
                 deskKutxa.textContent = "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak, antzinakoei laguntzean leinu guztiaren arima sakrifikatu zuten. Gertaera horretatik aurrera, belaunaldiz belaunaldi, degeneratuz joan dira. Hala ere, gaur egun oraindik argitasuna mantentzea lortu dute.";
             } else if (hautatutakoLeinua === "Ipotxa") {
                 deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Mendietako sakonuneetan eta meatzetan bizi diren izaki gogorrak. Langile nekaezinak eta tradizio zaharren defendatzaile leialak dira.";
-            } else if (hautatutakoLeinua === "Ertaina") {
-                deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Tamaina txikiko biztanleak, bizimodu lasaia eta bakezalea gustuko dutenak. Ezagunak dira beraien trebetasun eta zorteagatik.";
+                deskKutxa.textContent = "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin شدند. Denborarekin helburua ahaztu dute baina haien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira";
             } else {
                 deskKutxa.style.display = "none";
                 deskKutxa.textContent = "";
@@ -519,18 +514,14 @@
 
         function leinuOndorioakAplikatu() {
             if (hautatutakoLeinua === "Elfoa") {
-                balioak[0] -= 2; // SEN (Sendotasuna) -2
-                balioak[2] += 1; // BIZ (Bizkortasuna) +1
-                balioak[3] += 2; // HAU (Hautematea) +2
-            } else if (hautatutakoLeinua === "Jentila") {
-                balioak[0] += 3; // Sendotasuna +3
-                balioak[5] -= 2; // Adimena -2
+                balioak[0] -= 2; // SEN -2
+                balioak[2] += 1; // BIZ +1
+                balioak[3] += 2; // HAU +2
             } else if (hautatutakoLeinua === "Ipotxa") {
-                balioak[0] += 2; // Sendotasuna +2
-                balioak[6] -= 1; // Karisma -1
-            } else if (hautatutakoLeinua === "Ertaina") {
-                balioak[2] += 2; // Bizkortasuna +2
-                balioak[0] -= 1; // Sendotasuna -1
+                balioak[0] += 2; // SEN +2
+                balioak[2] -= 2; // BIZ -2
+                balioak[6] -= 2; // KAR -2
+                balioak[4] += 2; // BOT +2
             }
         }
 
@@ -616,11 +607,8 @@
                 izena.textContent = "Ustela";
                 deskribapena.textContent = "Kostua: UP 1. Egunean behin\nEdozein jaurtiketa errepikatu dezakezu.";
             } else if (hautatutakoLeinua === "Ipotxa") {
-                izena.textContent = "Forgearen Maisua";
-                deskribapena.textContent = "Metalekin eta lan teknikoekin abantaila berezia dute.";
-            } else if (hautatutakoLeinua === "Ertaina") {
-                izena.textContent = "Zorte Ona";
-                deskribapena.textContent = "Arrisku egoeretan zoritxarrei izkin egiteko gaitasuna.";
+                izena.textContent = "Nekaezina";
+                deskribapena.textContent = "Kostua: UP 1. Egunean behin\n10 Gogo puntu berreskuratzen dituzu";
             } else if (hautatutakoLeinua === "") {
                 izena.textContent = "—";
                 deskribapena.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
@@ -631,5 +619,4 @@
         }
     </script>
 </body>
-</html>
 </html>
