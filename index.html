@@ -439,7 +439,7 @@
             <thead>
                 <tr>
                     <th>Gaitasuna</th>
-                    <th>Lotutako Ezaugarria</th>
+                    <th>Ezaugarria x2</th>
                     <th>Mailak (1tik 7ra)</th>
                     <th>Balio Totala</th>
                 </tr>
@@ -454,7 +454,7 @@
             <thead>
                 <tr>
                     <th>Gaitasuna</th>
-                    <th>Lotutako Ezaugarria</th>
+                    <th>Ezaugarria x2</th>
                     <th>Mailak (1tik 7ra)</th>
                     <th>Balio Totala</th>
                 </tr>
@@ -468,13 +468,13 @@
         <div class="dohain-kutxa">
             <div class="dohain-izena" id="dohainIzenaLeinua">—</div>
             <div class="dohain-deskribapena" id="dohainDeskribapenaLeinua">
-                Aukeratu leinu bat dohaia hemen agertzeko.
+                Aukeratu leinu bat dohaina hemen agertzeko.
             </div>
         </div>
         <div class="dohain-kutxa">
             <div class="dohain-izena" id="dohainIzenaJatorria">—</div>
             <div class="dohain-deskribapena" id="dohainDeskribapenaJatorria">
-                Aukeratu jatorri bat dohaia hemen agertzeko.
+                Aukeratu jatorri bat dohaina hemen agertzeko.
             </div>
         </div>
 
@@ -675,7 +675,7 @@
                 Elfoa: "Atari dimentsional batetik etorriak, elfoak beste iratxo askorekin batera gaizki irten zen erritual batengatik iritsi ziren mundura. Jaioterritik bananduta, elfoak, etenik ez duen heriotza eta berraragiztatze ziklo batean harrapaturik aurkitzen dira.",
                 Gizakia: "Munduko leinurik hedatuena da gizakiena. Thandako mendi izoztuetatik Havako desertuetaraino aurkitu daitezke. Antzinakoekin batera izarren artean bidaiatu eta zeruko ateak irekitzerakoan heldu ziren Aendorrera. Gizakiak adoretsuak eta edozein egoeretara moldatzeko iaioak dira.",
                 Jentila: "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak, antzinakoei laguntzean leinu guztiaren arima sakrifikatu zuten. Gertaera horretatik aurrera, belaunaldiz belaunaldi, degeneratuz joan dira. Hala ere, gaur egun oraindik argitasuna mantentzea lortu dute.",
-                Ipotxa: "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin ziren.",
+                Ipotxa: "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin ziren. Denborarekin helburua ahaztu dute baina ha<ien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira.",
                 Ertaina: "Inork ez daki ziur nola eta noiz iritsi ziren ertainek hona. Nahiz eta gizakien antzekoak izan, azaldu ezin den sentsazio bat igartzen da beraien ondoan egotean. Zerbait ondo ez dagoenaren sentsazioa. Ertainak mundu osoan zehar zabaldu dira eta zorte izugarri handiko izakien ospea irabazi dute."
             };
 
@@ -925,7 +925,7 @@
 
             if (hautatutakoLeinua === "Elfoa") {
                 izena.textContent = "Berraragiztatzea (Leinua)";
-                deskribapena.textContent = "Kostua: EP 1. Egunean behin\nElfoek...";
+                deskribapena.textContent = "Kostua: EP 1. Egunean behin\nElfoek ahalegin bat egin dezakete beraien aurreko bizitzak oroitzeko. Hurrengo proban, 1d100 balioa izango duen edozein gaitasun lortuko du.";
             } else if (hautatutakoLeinua === "Gizakia") {
                 izena.textContent = "Ageriko Patua";
                 deskribapena.textContent = "Kostua: ZP 1. Egunean behin\nGizakiak mundua menderatzeko jaio dira. Zure hurrengo proban zuzeneko arrakasta lortuko duzu.";
@@ -934,10 +934,10 @@
                 deskribapena.textContent = "Kostua: UP 1. Saio bakoitzean behin.\nAdiskide baten ZP 1 lapurtzen duzu. Momentuan erabili beharko duzu.";
             } else if (hautatutakoLeinua === "Jentila") {
                 izena.textContent = "Ustela";
-                deskribapena.textContent = "Kostua: Ekintza bat / Pasiboa\nJentilen ondare ilunak ingurukoen izpiritua edo morala ahultzen du. Egoera jakin batzuetan etsaien ekintzak baldintzatzeko balio du.";
+                deskribapena.textContent = "Kostua: UP 1. Egunean behin\nEdozein jaurtiketa errepikatu dezakezu.";
             } else if (hautatutakoLeinua === "Ipotxa") {
                 izena.textContent = "Nekaezina";
-                deskribapena.textContent = "Kostua: Pasiboa / Nekea murrizteko\nIpotxek egindako gorputz-ahalegin luzeek ez dute horrenbeste zigortzen. Nekea metatzean hobeto eusten diote lanari edo martxari.";
+                deskribapena.textContent = "Kostua: UP 1. Egunean behin\n10 Gogo puntu berreskuratzen dituzu.";
             } else {
                 izena.textContent = "—";
                 deskribapena.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
