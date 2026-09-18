@@ -1,4 +1,387 @@
-<!-- =========================
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertsonaia Sortzailea</title>
+    <style>
+        :root {
+            --primary: #8e44ad;
+            --primary-dark: #6c3483;
+            --accent: #f39c12;
+            --bg-color: #f4f6f7;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #7f8c8d;
+            --border-color: #dcdde1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        /* Urratsen adierazlea */
+        .urrats-adierazlea {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .urrats-indikatzailea {
+            font-weight: bold;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .urrats-indikatzailea.unekoa {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .urrats-indikatzailea.egina {
+            color: #27ae60;
+        }
+
+        .pausoa {
+            display: none;
+        }
+
+        .pausoa.aktiboa {
+            display: block;
+        }
+
+        /* Taulak */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        th {
+            background-color: #fafbfc;
+            color: var(--text-main);
+        }
+
+        /* Botoiak eta formularioak */
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        select, input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .botoi-taldea {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* Ficha estiloa (Ezkerreko edo eskuineko panela) */
+        .ficha-kaxa {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fafbfc;
+        }
+
+        .ficha-kaxa h3 {
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .badge.pos { background-color: #d4efdf; color: #196f3d; }
+        .badge.neg { background-color: #ffadad; color: #900c3f; }
+
+        .deskribapena-Kutxa {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.4;
+            white-space: pre-line;
+            background: #fff;
+            padding: 10px;
+            border-left: 3px solid var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .maila-karratuak {
+            display: flex;
+            gap: 3px;
+        }
+
+        .maila-karratua {
+            width: 12px;
+            height: 12px;
+            border: 1px solid var(--text-muted);
+            background-color: #fff;
+            display: inline-block;
+        }
+
+        .maila-karratua.beteta {
+            background-color: var(--primary);
+            border-color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- =========================
+             PANELA: SORTZAILEA (EZKERRA)
+         ========================= -->
+        <div class="panel">
+            <h1>Pertsonaia Sortzailea</h1>
+
+            <!-- Urratsen nabigazioa -->
+            <div class="urrats-adierazlea">
+                <span id="indPauso1" class="urrats-indikatzailea unekoa">1. Ezaugarriak</span>
+                <span id="indPauso2" class="urrats-indikatzailea">2. Leinua</span>
+                <span id="indPauso3" class="urrats-indikatzailea">3. Jatorria</span>
+                <span id="indPauso4" class="urrats-indikatzailea">4. Amaiera</span>
+            </div>
+
+            <!-- 1. PAUSOA: EZAUGARRIAK -->
+            <div id="pauso1" class="pausoa aktiboa">
+                <h2>1. Ezaugarrien Jaurtiketa</h2>
+                <p>Egin klik botoian zure oinarrizko ezaugarrien balioak lortzeko (3 dado jaurti dira ezaugarri bakoitzeko).</p>
+                <button id="sortu">Dadoak Jaurti</button>
+                
+                <table style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Ezaugarria</th>
+                            <th>D1</th>
+                            <th>D2</th>
+                            <th>D3</th>
+                            <th>Guztira</th>
+                        </tr>
+                    </thead>
+                    <tbody id="Emaitzataula">
+                        <!-- Javascript-ez beteko da -->
+                    </tbody>
+                </table>
+
+                <div class="botoi-taldea">
+                    <span></span>
+                    <button id="hurrengoa1" style="display: none;">Hurrengoa</button>
+                </div>
+            </div>
+
+            <!-- 2. PAUSOA: LEINUA -->
+            <div id="pauso2" class="pausoa">
+                <h2>2. Leinua Aukeratu</h2>
+                <label for="leinuSelect">Aukeratu zure leinua:</label>
+                <select id="leinuSelect">
+                    <option value="">Aukeratu leinua...</option>
+                    <option value="Elfoa">Elfoa</option>
+                    <option value="Ertaina">Ertaina</option>
+                    <option value="Gizakia">Gizakia</option>
+                    <option value="Ipotxa">Ipotxa</option>
+                    <option value="Jentila">Jentila</option>
+                </select>
+
+                <div id="leinuBadges" style="margin-bottom: 10px;"></div>
+                <div id="leinuDeskribapena" class="deskribapena-Kutxa" style="display: none;"></div>
+
+                <div id="gizakiAukera" style="display: none;" class="ficha-kaxa">
+                    <h3>Gizakiaren Hobekuntza</h3>
+                    <p>Aukeratu zein ezaugarri igo nahi duzun 11ra (11tik behera dauzkatenen artean):</p>
+                    <select id="gizakiEzaugarria">
+                        <option value="">Aukeratu ezaugarria</option>
+                    </select>
+                </div>
+
+                <div class="ficha-kaxa">
+                    <h3>Leinuko Dohaina</h3>
+                    <p><strong id="dohainIzenaLeinua">—</strong></p>
+                    <p id="dohainDeskribapenaLeinua" style="font-size: 0.9rem; color: #555;">Aukeratu leinu bat dohaia hemen agertzeko.</p>
+                </div>
+
+                <div class="botoi-taldea">
+                    <button id="atzera2">Atzera</button>
+                    <button id="hurrengoa2" style="display: none;">Hurrengoa</button>
+                </div>
+            </div>
+
+            <!-- 3. PAUSOA: JATORRIA -->
+            <div id="pauso3" class="pausoa">
+                <h2>3. Jatorria Aukeratu</h2>
+                <label for="jatorriSelect">Aukeratu jatorria:</label>
+                <select id="jatorriSelect">
+                    <option value="">Aukeratu leinua lehenengo...</option>
+                </select>
+
+                <div id="jatorriDeskribapena" class="deskribapena-Kutxa" style="display: none;"></div>
+
+                <div id="jatorriDohainAukera" style="display: none;" class="ficha-kaxa">
+                    <h3>Jatorri Dohaina Aukeratu</h3>
+                    <p>Hautatu bi dohainetatik bat:</p>
+                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                        <input type="radio" name="jatorriDohaina" value="0"> <strong id="jGenDohain1Izena"></strong>
+                        <p id="jGenDohain1Desk" style="font-size: 0.85rem; color: #666; margin: 2px 0 10px 20px; white-space: pre-line;"></p>
+                    </label>
+                    <label style="display: block; cursor: pointer;">
+                        <input type="radio" name="jatorriDohaina" value="1"> <strong id="jGenDohain2Izena"></strong>
+                        <p id="jGenDohain2Desk" style="font-size: 0.85rem; color: #666; margin: 2px 0 0 20px; white-space: pre-line;"></p>
+                    </label>
+                </div>
+
+                <div class="botoi-taldea">
+                    <button id="atzera3">Atzera</button>
+                    <button id="hurrengoa3" style="display: none;">Hurrengoa</button>
+                </div>
+            </div>
+
+            <!-- 4. PAUSOA: AMAIERA -->
+            <div id="pauso4" class="pausoa">
+                <h2>4. Pertsonaiaren Aurkezpena</h2>
+                <p>Zorionak! Zure pertsonaia sortze prozesua amaitu da. Egiaztatu datuak eskuineko panelean.</p>
+                
+                <div class="botoi-taldea">
+                    <button id="atzera4">Atzera</button>
+                    <button onclick="alert('Pertsonaia gordeta!')" style="background-color: #27ae60;">Gorde Pertsonaia</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================
+             PANELA: FITXA (ESKUINA)
+         ========================= -->
+        <div class="panel">
+            <h2>Pertsonaia Fitxa</h2>
+            
+            <div class="ficha-kaxa">
+                <h3>Datu Orokorrak</h3>
+                <p><strong>Estatusa:</strong> <span id="fichaEstatusa">—</span></p>
+                <p><strong>Leinua:</strong> <span id="fichaLeinua">—</span></p>
+            </div>
+
+            <div class="ficha-kaxa">
+                <h3>Ezaugarriak</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ezaugarria</th>
+                            <th>Balioa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fichaEzaugarriakGorputza">
+                        <tr><td colspan="2">Oraindik ez daude daturik.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ficha-kaxa">
+                <h3>Oinarrizko Gaitasunak</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Gaitasuna</th>
+                            <th>Eza.</th>
+                            <th>Maila</th>
+                            <th>Totala</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fichaOinarrizkoGaitasunakGorputza">
+                        <tr><td colspan="4">Oraindik ez daude daturik.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ficha-kaxa">
+                <h3>Bestelako Gaitasunak</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Gaitasuna</th>
+                            <th>Eza.</th>
+                            <th>Maila</th>
+                            <th>Totala</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fichaBestelakoGaitasunakGorputza">
+                        <tr><td colspan="4">Oraindik ez daude daturik.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ficha-kaxa">
+                <h3>Jatorrizko Dohaina</h3>
+                <p><strong id="dohainIzenaJatorria">—</strong></p>
+                <p id="dohainDeskribapenaJatorria" style="font-size: 0.9rem; color: #555;">Aukeratu jatorri bat dohaia hemen agertzeko.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================
          JAVASCRIPT
      ========================= -->
     <script>
@@ -34,7 +417,6 @@
             { izena: "ZORROZTASUNA", ezaugarria: "ADI" }
         ];
 
-        // Jatorrien datu-basea
         const jatorriakDatuak = [
             {
                 id: "DiasporaEleshita",
@@ -415,14 +797,11 @@
                 });
             }
 
-            // Bestelako gaitasunak kargatu jatorritik baldin baditu
             const bestelakoTaula = document.getElementById("fichaBestelakoGaitasunakGorputza");
             bestelakoTaula.innerHTML = "";
 
             if (hautatutakoJatorriaObj && hautatutakoJatorriaObj.bestelakoGaitasunak) {
                 hautatutakoJatorriaObj.bestelakoGaitasunak.forEach((bg) => {
-                    let balioTotala = 0;
-                    // Hemen kalkulua egokitu dezakezu behar izanez gero
                     let karratuakHTML = `<div class="maila-karratuak">`;
                     for (let m = 1; m <= 7; m++) {
                         const beteta = m <= bg.maila ? "beteta" : "";
@@ -442,3 +821,5 @@
             }
         }
     </script>
+</body>
+</html>
