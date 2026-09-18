@@ -137,7 +137,6 @@
             display: none;
         }
 
-        /* Etiketa edo badge bisualen estiloak */
         .badge-container {
             display: flex;
             gap: 6px;
@@ -163,7 +162,7 @@
         }
 
         /* =========================
-           GAITASUNEN MAILAK (IKUSKATZEKO KARRATUAK)
+           GAITASUNEN MAILAK
         ========================= */
         .maila-karratuak {
             display: flex;
@@ -233,10 +232,6 @@
             font-size: 20px;
         }
 
-        /* =========================
-           DOHAINAK ETA GAITASUNAK
-        ========================= */
-
         .sekzio-titulua {
             border-bottom: 2px solid #222;
             padding-bottom: 8px;
@@ -276,9 +271,6 @@
         <h2>PERTSONAIA SORTZAILEA</h2>
     </header>
 
-    <!-- =========================
-         SORTZAILEA
-    ========================= -->
     <section id="sortzailea">
 
         <div id="pausoIndizeak">
@@ -327,13 +319,9 @@
                     <option value="Jentila">Jentila</option>
                 </select>
 
-                <!-- Leinuen modifikatzaile bisualak (Badge-ak) -->
                 <div id="leinuBadges" class="badge-container"></div>
-
-                <!-- Leinuen deskribapena kurtsiban -->
                 <div id="leinuDeskribapena" style="display:none;"></div>
 
-                <!-- Gizakiaren ezaugarri moldaketa berezia -->
                 <div id="gizakiAukera">
                     <label for="gizakiEzaugarria">
                         Aukeratu 11 baino txikiagoa den ezaugarria (11ra igotzeko):
@@ -356,6 +344,8 @@
             <h2>Jatorriak Aukeratu</h2>
             
             <div id="jatorriAukeraketa">
+                <p id="jatorriBaldintzaOharra" style="font-size: 13px; color: #c0392b; font-weight: bold; margin-bottom: 10px;"></p>
+                
                 <select id="jatorriSelect">
                     <option value="">Aukeratu jatorria</option>
                     <option value="Diaspora Eleshitaren jatorria">Diaspora Eleshitaren jatorria</option>
@@ -382,7 +372,6 @@
 
     </section>
 
-
     <!-- =========================
          PERTSONAIA ORRIA
     ========================= -->
@@ -390,7 +379,6 @@
 
         <h2>ILGORA - PERTSONAIA</h2>
 
-        <!-- LEINUA ETA JATORRIA -->
         <div class="ficha-goiburua" style="grid-template-columns: 1fr 1fr;">
             <div class="kutxa">
                 <div class="kutxa-izenburua">LEINUA</div>
@@ -402,7 +390,6 @@
             </div>
         </div>
 
-        <!-- EZAUGARRIAK -->
         <h3 class="sekzio-titulua">EZAUGARRIAK</h3>
         <table>
             <thead>
@@ -415,7 +402,6 @@
             </tbody>
         </table>
 
-        <!-- OINARRIZKO GAITASUNAK -->
         <h3 class="sekzio-titulua">OINARRIZKO GAITASUNAK (Hasierako balioa: Ezaugarria × 2)</h3>
         <div class="gaitasun-azpititulua">
             Mailen bonuak eta kategoriak: 
@@ -436,7 +422,6 @@
             </tbody>
         </table>
 
-        <!-- DOHAINAK -->
         <h3 class="sekzio-titulua">DOHAINAK (Gehienez 6)</h3>
         <div class="dohain-kutxa">
             <div class="dohain-izena" id="dohainIzena">—</div>
@@ -447,24 +432,17 @@
 
     </section>
 
-
-
-    <!-- =========================
-         JAVASCRIPT
-    ========================= -->
     <script>
         const ezaugarriak = [
             "Sendotasuna", "Trebezia", "Bizkortasuna", 
             "Hautematea", "Boterea", "Adimena", "Karisma"
         ];
 
-        // Ezaugarrien laburdurak mapeatzeko
         const ezaugarriLaburdurak = {
             "SEN": 0, "TRE": 1, "BIZ": 2, 
             "HAU": 3, "BOT": 4, "ADI": 5, "KAR": 6
         };
 
-        // Oinarrizko gaitasunak eta haien ezaugarriak
         const oinarrizkoGaitasunakZerrenda = [
             { izena: "ARRETA", ezaugarria: "HAU" },
             { izena: "ARTISAUTZA", ezaugarria: "TRE" },
@@ -485,6 +463,16 @@
             { izena: "SAIHESTU", ezaugarria: "BIZ" },
             { izena: "ZALDIAK", ezaugarria: "TRE" },
             { izena: "ZORROZTASUNA", ezaugarria: "ADI" }
+        ];
+
+        // Jatorrien zerrenda eta haiei dagozkien leinu baliagarriak (Leinu baldintzak)
+        const jatorriakZerrenda = [
+            {
+                izena: "Diaspora Eleshitaren jatorria",
+                baliozkoLeinuak: ["Elfoa"], // Adibidez, hau soilik elfoentzat
+                deskribapena: "Diaspora Eleshitaren jatorria dutenekin lotutako jatorri historikoa eta kulturala. Elfoentzat bakarrik eskuragarria."
+            }
+            // Hemen beste jatorri batzuk gehitu litezke, adibidez: { izena: "Beste Jatorri Bat", baliozkoLeinuak: ["Gizakia", "Ertaina"], deskribapena: "..." }
         ];
 
         let balioak = [];
@@ -545,7 +533,6 @@
             pasuaAldatu(2);
         });
 
-
         /* 2. PAUSOA: LEINUA */
         const leinuSelect = document.getElementById("leinuSelect");
 
@@ -561,6 +548,7 @@
             gizakiAukeraEguneratu();
             dohaiaEguneratu();
             pertsonaiaEguneratu();
+            jatorriAukeraketaEguneratu(); // Egiaztatu jatorria bateragarria den leinu berriarekin
 
             const hurrengoa2 = document.getElementById("hurrengoa2");
             if (hautatutakoLeinua === "") {
@@ -596,21 +584,17 @@
 
         function leinuDeskribapenaEguneratu() {
             const deskKutxa = document.getElementById("leinuDeskribapena");
-            if (hautatutakoLeinua === "Elfoa") {
+            const deskribapenak = {
+                Elfoa: "Atari dimentsional batetik etorriak, elfoak beste iratxo askorekin batera gaizki irten zen erritual batengatik iritsi ziren mundura. Jaioterritik bananduta, elfoak, etenik ez duen heriotza eta berraragiztatze ziklo batean harrapaturik aurkitzen dira.",
+                Gizakia: "Munduko leinurik hedatuena da gizakiena. Thandako mendi izoztuetatik Havako desertuetaraino aurkitu daitezke. Antzinakoekin batera izarren artean bidaiatu eta zeruko ateak irekitzerakoan heldu ziren Aendorrera. Gizakiak adoretsuak eta edozein egoeretara moldatzeko iaioak dira.",
+                Jentila: "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak, antzinakoei laguntzean leinu guztiaren arima sakrifikatu zuten. Gertaera horretatik aurrera, belaunaldiz belaunaldi, degeneratuz joan dira. Hala ere, gaur egun oraindik argitasuna mantentzea lortu dute.",
+                Ipotxa: "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin ziren. Denborarekin helburua ahaztu dute baina haien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira.",
+                Ertaina: "Inork ez daki ziur nola eta noiz iritsi ziren ertainek hona. Nahiz eta gizakien antzekoak izan, azaldu ezin den sentsazio bat igartzen da beraien ondoan egotean. Zerbait ondo ez dagoenaren sentsazioa. Ertainak mundu osoan zehar zabaldu dira eta zorte izugarri handiko izakien ospea irabazi dute."
+            };
+
+            if (deskribapenak[hautatutakoLeinua]) {
                 deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Atari dimentsional batetik etorriak, elfoak beste iratxo askorekin batera gaizki irten zen erritual batengatik iritsi ziren mundura. Jaioterritik bananduta, elfoak, etenik ez duen heriotza eta berraragiztatze ziklo batean harrapaturik aurkitzen dira.";
-            } else if (hautatutakoLeinua === "Gizakia") {
-                deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Munduko leinurik hedatuena da gizakiena. Thandako mendi izoztuetatik Havako desertuetaraino aurkitu daitezke. Antzinakoekin batera izarren artean bidaiatu eta zeruko ateak irekitzerakoan heldu ziren Aendorrera. Gizakiak adoretsuak eta edozein egoeretara moldatzeko iaioak dira.";
-            } else if (hautatutakoLeinua === "Jentila") {
-                deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Aendorreko jatorrizko leinuetako bat dira jentilak. Gizakiak baino garaiago, indartsuago eta azkarragoak izandakoak, antzinakoei laguntzean leinu guztiaren arima sakrifikatu zuten. Gertaera horretatik aurrera, belaunaldiz belaunaldi, degeneratuz joan dira. Hala ere, gaur egun oraindik argitasuna mantentzea lortu dute.";
-            } else if (hautatutakoLeinua === "Ipotxa") {
-                deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Materia hiletik, eraikitzaile eta zaindari bezala sortuak, ipotxak antzinakoen nekropoliak babesteko egin شدند. Denborarekin helburua ahaztu dute baina haien izaera, sortzaileek ezarritako baldintzen menpe jarraitzen du eta lagun leialenak zein etsai mendekarienak izan ohi dira";
-            } else if (hautatutakoLeinua === "Ertaina") {
-                deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Inork ez daki ziur nola eta noiz iritsi ziren ertainek hona. Nahiz eta gizakien antzekoak izan, azaldu ezin den sentsazio bat igartzen da beraien ondoan egotean. Zerbait ondo ez dagoenaren sentsazioa. Ertainak mundu osoan zehar zabaldu dira eta zorte izugarri handiko izakien ospea irabazi dute";
+                deskKutxa.textContent = deskribapenak[hautatutakoLeinua];
             } else {
                 deskKutxa.style.display = "none";
                 deskKutxa.textContent = "";
@@ -619,22 +603,13 @@
 
         function leinuOndorioakAplikatu() {
             if (hautatutakoLeinua === "Elfoa") {
-                balioak[0] -= 2; // SEN -2
-                balioak[2] += 1; // BIZ +1
-                balioak[3] += 2; // HAU +2
+                balioak[0] -= 2; balioak[2] += 1; balioak[3] += 2;
             } else if (hautatutakoLeinua === "Ertaina") {
-                balioak[0] -= 2; // SEN -2
-                balioak[6] += 3; // KAR +3
+                balioak[0] -= 2; balioak[6] += 3;
             } else if (hautatutakoLeinua === "Ipotxa") {
-                balioak[0] += 2; // SEN +2
-                balioak[2] -= 2; // BIZ -2
-                balioak[6] -= 2; // KAR -2
-                balioak[4] += 2; // BOT +2
+                balioak[0] += 2; balioak[2] -= 2; balioak[6] -= 2; balioak[4] += 2;
             } else if (hautatutakoLeinua === "Jentila") {
-                balioak[0] += 4; // SEN +4
-                balioak[5] -= 3; // ADI -3
-                balioak[6] -= 2; // KAR -2
-                balioak[4] += 1; // BOT +1
+                balioak[0] += 4; balioak[5] -= 3; balioak[6] -= 2; balioak[4] += 1;
             }
         }
 
@@ -665,7 +640,7 @@
 
             if (hautapena !== "") {
                 const indizea = parseInt(hautapena);
-                balioak[indizea] = 11; // Gizakiaren ezaugarri-moldaketa
+                balioak[indizea] = 11;
                 document.getElementById("hurrengoa2").style.display = "inline-block";
             } else {
                 document.getElementById("hurrengoa2").style.display = "none";
@@ -682,17 +657,48 @@
         });
 
 
-        /* 3. PAUSOA: JATORRIAK */
+        /* 3. PAUSOA: JATORRIAK ETA LEINU BALDINTZAK */
         const jatorriSelect = document.getElementById("jatorriSelect");
+
+        function jatorriAukeraketaEguneratu() {
+            jatorriSelect.innerHTML = `<option value="">Aukeratu jatorria</option>`;
+            
+            let aukeragarriakDaude = false;
+
+            jatorriakZerrenda.forEach(jatorria => {
+                // Egiaztatu ea hautatutako leinua jatorri honen baliozko leinuen artean dagoen
+                if (jatorria.baliozkoLeinuak.includes(hautatutakoLeinua)) {
+                    jatorriSelect.innerHTML += `<option value="${jatorria.izena}">${jatorria.izena}</option>`;
+                    aukeragarriakDaude = true;
+                }
+            });
+
+            const oharra = document.getElementById("jatorriBaldintzaOharra");
+            if (!aukeragarriakDaude) {
+                oharra.textContent = `Adi: Hautatutako leinuarentzat (${hautatutakoLeinua}) ez dago oraingoz jatorri bateragarririk.`;
+            } else {
+                oharra.textContent = "";
+            }
+
+            // Hautatuta zegoen jatorria baliogabea bihurtu bada, garbitu
+            if (!jatorriaSelect.querySelector(`option[value="${hautatutakoJatorria}"]`)) {
+                hautatutakoJatorria = "";
+                document.getElementById("fichaJatorria").textContent = "—";
+                document.getElementById("jatorriDeskribapena").style.display = "none";
+                document.getElementById("hurrengoa3").style.display = "none";
+            }
+        }
 
         jatorriSelect.addEventListener("change", () => {
             hautatutakoJatorria = jatorriSelect.value;
             document.getElementById("fichaJatorria").textContent = hautatutakoJatorria || "—";
 
             const deskKutxa = document.getElementById("jatorriDeskribapena");
-            if (hautatutakoJatorria === "Diaspora Eleshitaren jatorria") {
+            const aurkitutakoa = jatorriakZerrenda.find(j => j.izena === hautatutakoJatorria);
+
+            if (aurkitutakoa) {
                 deskKutxa.style.display = "block";
-                deskKutxa.textContent = "Diaspora Eleshitaren jatorria dutenekin lotutako jatorri historikoa eta kulturala.";
+                deskKutxa.textContent = aurkitutakoa.deskribapena;
             } else {
                 deskKutxa.style.display = "none";
                 deskKutxa.textContent = "";
@@ -721,7 +727,6 @@
 
         /* PERTSONAIA ORRIA EGUNERATU */
         function pertsonaiaEguneratu() {
-            // 1. Ezaugarriak taula
             const fichaTaula = document.getElementById("fichaEzaugarriakGorputza");
             fichaTaula.innerHTML = "";
 
@@ -737,17 +742,15 @@
                 `;
             }
 
-            // 2. Oinarrizko Gaitasunak taula
             const oinarrizkoTaula = document.getElementById("fichaOinarrizkoGaitasunakGorputza");
             oinarrizkoTaula.innerHTML = "";
 
             if (balioak.length > 0) {
-                oinarrizkoGaitasunakZerrenda.forEach((gaitasuna, index) => {
+                oinarrizkoGaitasunakZerrenda.forEach((gaitasuna) => {
                     const ezaugarriIndizea = ezaugarriLaburdurak[gaitasuna.ezaugarria];
                     const ezaugarriBalioa = balioak[ezaugarriIndizea];
-                    const hasierakoBalioa = ezaugarriBalioa * 2; // Ezaugarria x 2
+                    const hasierakoBalioa = ezaugarriBalioa * 2;
 
-                    // Karratuen HTML-a ikusteko soilik (7 maila, oraingoz hutsik/grisean)
                     let karratuakHTML = `<div class="maila-karratuak">`;
                     for (let m = 1; m <= 7; m++) {
                         karratuakHTML += `<span class="maila-karratua" title="${m}. Maila"></span>`;
@@ -766,27 +769,22 @@
             }
         }
 
-
         /* DOHAINAK */
         function dohaiaEguneratu() {
             const izena = document.getElementById("dohainIzena");
             const deskribapena = document.getElementById("dohainDeskribapena");
 
-            if (hautatutakoLeinua === "Elfoa") {
-                izena.textContent = "Berraragiztatzea";
-                deskribapena.textContent = "Kostua: EP 1. Egunean behin\nElfoak ahalegin bat egin dezakete beraien aurreko bizitzak oroitzeko. Hurrengo proban, 1d100 balioa izango duen edozein gaitasun lortuko du.";
-            } else if (hautatutakoLeinua === "Gizakia") {
-                izena.textContent = "Ageriko Patua";
-                deskribapena.textContent = "Kostua: ZP 1. Egunean behin\nGizakiak mundua menderatzeko jaio dira. Zure hurrengo proban zuzeneko arrakasta lortuko duzu.";
-            } else if (hautatutakoLeinua === "Jentila") {
-                izena.textContent = "Ustela";
-                deskribapena.textContent = "Kostua: UP 1. Egunean behin\nEdozein jaurtiketa errepikatu dezakezu.";
-            } else if (hautatutakoLeinua === "Ipotxa") {
-                izena.textContent = "Nekaezina";
-                deskribapena.textContent = "Kostua: UP 1. Egunean behin\n10 Gogo puntu berreskuratzen dituzu";
-            } else if (hautatutakoLeinua === "Ertaina") {
-                izena.textContent = "Zori Ebasleak";
-                deskribapena.textContent = "Kostua: UP 1. Saio bakoitzean behin.\nAdiskide baten ZP 1 lapurtzen duzu. Momentuan erabili beharko duzu.";
+            const dohainakMap = {
+                Elfoa: { izena: "Berraragiztatzea", desk: "Kostua: EP 1. Egunean behin\nElfoak ahalegin bat egin dezakete beraien aurreko bizitzak oroitzeko. Hurrengo proban, 1d100 balioa izango duen edozein gaitasun lortuko du." },
+                Gizakia: { izena: "Ageriko Patua", desk: "Kostua: ZP 1. Egunean behin\nGizakiak mundua menderatzeko jaio dira. Zure hurrengo proban zuzeneko arrakasta lortuko duzu." },
+                Jentila: { izena: "Ustela", desk: "Kostua: UP 1. Egunean behin\nEdozein jaurtiketa errepikatu dezakezu." },
+                Ipotxa: { izena: "Nekaezina", desk: "Kostua: UP 1. Egunean behin\n10 Gogo puntu berreskuratzen dituzu" },
+                Ertaina: { izena: "Zori Ebasleak", desk: "Kostua: UP 1. Saio bakoitzean behin.\nAdiskide baten ZP 1 lapurtzen duzu. Momentuan erabili beharko duzu." }
+            };
+
+            if (dohainakMap[hautatutakoLeinua]) {
+                izena.textContent = dohainakMap[hautatutakoLeinua].izena;
+                deskribapena.textContent = dohainakMap[hautatutakoLeinua].desk;
             } else if (hautatutakoLeinua === "") {
                 izena.textContent = "—";
                 deskribapena.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
