@@ -1,490 +1,6 @@
-<!DOCTYPE html>
-<html lang="eu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ILGORA - Pertsonaia Sortzailea</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 30px;
-            color: #222;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 42px;
-            letter-spacing: 4px;
-        }
-
-        header h2 {
-            margin: 5px 0 0 0;
-            font-size: 20px;
-            font-weight: normal;
-            letter-spacing: 2px;
-        }
-
-        /* =========================
-           SORTZAILEA ETA PAUSOAK
-        ========================= */
-
-        #sortzailea {
-            max-width: 950px;
-            margin: 0 auto 50px auto;
-            background: white;
-            border: 1px solid #333;
-            padding: 25px;
-        }
-
-        .pausoa {
-            display: none;
-        }
-
-        .pausoa.aktiboa {
-            display: block;
-        }
-
-        #pausoIndizeak {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #666;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        #pausoIndizeak div.egina {
-            color: #27ae60;
-        }
-
-        #pausoIndizeak div.unekoa {
-            color: #222;
-            text-decoration: underline;
-        }
-
-        button {
-            padding: 10px 25px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #222;
-            color: white;
-            border: none;
-        }
-
-        button:hover {
-            background-color: #444;
-        }
-
-        .botoi-lerroa {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 100%;
-            background: white;
-        }
-
-        th, td {
-            border: 1px solid #333;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #222;
-            color: white;
-        }
-
-        /* =========================
-           LEINUA AUKERATU
-        ========================= */
-
-        #leinuAukeraketa, #jatorriAukeraketa {
-            margin-top: 15px;
-        }
-
-        select {
-            padding: 8px;
-            font-size: 16px;
-            min-width: 200px;
-        }
-
-        #leinuDeskribapena, #jatorriDeskribapena {
-            margin-top: 15px;
-            font-style: italic;
-            color: #555;
-            line-height: 1.4;
-            background: #fdfdfd;
-            border-left: 3px solid #666;
-            padding: 10px;
-        }
-
-        #gizakiAukera {
-            margin-top: 20px;
-            display: none;
-        }
-
-        .jatorri-aukerak-lerroa {
-            margin-top: 15px;
-            background: #f9f9f9;
-            padding: 15px;
-            border: 1px solid #ccc;
-        }
-
-        /* Etiketa edo badge bisualen estiloak */
-        .badge-container {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .badge.pos {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .badge.neg {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        /* =========================
-           GAITASUNEN MAILAK (IKUSKATZEKO KARRATUAK)
-        ========================= */
-        .maila-karratuak {
-            display: flex;
-            gap: 4px;
-        }
-
-        .maila-karratua {
-            width: 16px;
-            height: 16px;
-            border: 1px solid #333;
-            background-color: #fff;
-            display: inline-block;
-        }
-
-        .maila-karratua.beteta {
-            background-color: #222;
-        }
-
-        .gaitasun-azpititulua {
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 8px;
-            font-style: italic;
-        }
-
-        /* =========================
-           PERTSONAIA ORRIA
-        ========================= */
-
-        #pertsonaiaOrria {
-            max-width: 950px;
-            margin: 0 auto;
-            background-color: white;
-            border: 2px solid #222;
-            padding: 30px;
-            box-sizing: border-box;
-        }
-
-        #pertsonaiaOrria h2 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 30px;
-            font-size: 28px;
-            letter-spacing: 2px;
-        }
-
-        .ficha-goiburua {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .kutxa {
-            border: 1px solid #333;
-            padding: 15px;
-            min-height: 50px;
-        }
-
-        .kutxa-izenburua {
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .kutxa-balioa {
-            font-size: 20px;
-        }
-
-        /* =========================
-           DOHAINAK ETA GAITASUNAK
-        ========================= */
-
-        .sekzio-titulua {
-            border-bottom: 2px solid #222;
-            padding-bottom: 8px;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-
-        .dohain-kutxa {
-            border: 1px solid #333;
-            padding: 20px;
-            background-color: #f9f9f9;
-            margin-bottom: 15px;
-        }
-
-        .dohain-izena {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .dohain-deskribapena {
-            line-height: 1.5;
-            white-space: pre-line;
-        }
-
-        @media (max-width: 600px) {
-            body { padding: 15px; }
-            header h1 { font-size: 32px; }
-            header h2 { font-size: 16px; }
-            #pertsonaiaOrria { padding: 15px; }
-            .ficha-goiburua { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>ILGORA</h1>
-        <h2>PERTSONAIA SORTZAILEA</h2>
-    </header>
-
-    <!-- =========================
-         SORTZAILEA
-    ========================= -->
-    <section id="sortzailea">
-
-        <div id="pausoIndizeak">
-            <div id="indPauso1" class="unekoa">1. Ezaugarriak</div>
-            <div id="indPauso2">2. Leinua</div>
-            <div id="indPauso3">3. Jatorria</div>
-            <div id="indPauso4">4. Amaiera</div>
-        </div>
-
-        <!-- 1. PAUSOA: EZAUGARRIAK -->
-        <div id="pauso1" class="pausoa aktiboa">
-            <h2>Ezaugarriak (3d6)</h2>
-            <p>Sakatu botoia ezaugarriak lortzeko eta jarraitzeko.</p>
-            <button id="sortu">Sortu Ezaugarriak</button>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ezaugarria</th>
-                        <th>1. Dadoa</th>
-                        <th>2. Dadoa</th>
-                        <th>3. Dadoa</th>
-                        <th>Denera</th>
-                    </tr>
-                </thead>
-                <tbody id="Emaitzataula">
-                </tbody>
-            </table>
-
-            <div class="botoi-lerroa" style="justify-content: flex-end;">
-                <button id="hurrengoa1" style="display:none;">Jarraitu →</button>
-            </div>
-        </div>
-
-        <!-- 2. PAUSOA: LEINUA -->
-        <div id="pauso2" class="pausoa">
-            <h2>Leinua Aukeratu</h2>
-            
-            <div id="leinuAukeraketa">
-                <select id="leinuSelect">
-                    <option value="">Aukeratu leinua</option>
-                    <option value="Gizakia">Gizakia</option>
-                    <option value="Elfoa">Elfoa</option>
-                    <option value="Ertaina">Ertaina</option>
-                    <option value="Ipotxa">Ipotxa</option>
-                    <option value="Jentila">Jentila</option>
-                </select>
-
-                <div id="leinuBadges" class="badge-container"></div>
-                <div id="leinuDeskribapena" style="display:none;"></div>
-
-                <div id="gizakiAukera">
-                    <label for="gizakiEzaugarria">
-                        Aukeratu 11 baino txikiagoa den ezaugarria (11ra igotzeko):
-                    </label>
-                    <br><br>
-                    <select id="gizakiEzaugarria">
-                        <option value="">Aukeratu ezaugarria</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="botoi-lerroa">
-                <button id="atzera2">← Atzera</button>
-                <button id="hurrengoa2" style="display:none;">Jarraitu →</button>
-            </div>
-        </div>
-
-        <!-- 3. PAUSOA: JATORRIA -->
-        <div id="pauso3" class="pausoa">
-            <h2>Jatorria Aukeratu</h2>
-            
-            <div id="jatorriAukeraketa">
-                <select id="jatorriSelect">
-                    <option value="">Aukeratu leinua lehenik</option>
-                </select>
-
-                <div id="jatorriDeskribapena" style="display:none;"></div>
-
-                <div id="jatorriDohainAukera" class="jatorri-aukerak-lerroa" style="display:none;">
-                    <strong>Aukeratu Dohain bat:</strong><br><br>
-                    <label><input type="radio" name="jatorriDohaina" value="0"> <span id="jGenDohain1Izena"></span> - <span id="jGenDohain1Desk"></span></label><br><br>
-                    <label><input type="radio" name="jatorriDohaina" value="1"> <span id="jGenDohain2Izena"></span> - <span id="jGenDohain2Desk"></span></label>
-                </div>
-            </div>
-
-            <div class="botoi-lerroa">
-                <button id="atzera3">← Atzera</button>
-                <button id="hurrengoa3" style="display:none;">Jarraitu →</button>
-            </div>
-        </div>
-
-        <!-- 4. PAUSOA: AMAIERA -->
-        <div id="pauso4" class="pausoa">
-            <h2>Pertsonaia Sortuta!</h2>
-            <p>Zure pertsonaia prest dago. Beheko fitxan ikus dezakezu emaitza osoa.</p>
-            
-            <div class="botoi-lerroa">
-                <button id="atzera4">← Atzera</button>
-            </div>
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         PERTSONAIA ORRIA
-    ========================= -->
-    <section id="pertsonaiaOrria">
-
-        <h2>ILGORA - PERTSONAIA</h2>
-
-        <!-- LEINUA ETA ESTATUSA -->
-        <div class="ficha-goiburua">
-            <div class="kutxa">
-                <div class="kutxa-izenburua">LEINUA</div>
-                <div class="kutxa-balioa" id="fichaLeinua">—</div>
-            </div>
-            <div class="kutxa">
-                <div class="kutxa-izenburua">ESTATUSA</div>
-                <div class="kutxa-balioa" id="fichaEstatusa">—</div>
-            </div>
-        </div>
-
-        <!-- EZAUGARRIAK -->
-        <h3 class="sekzio-titulua">EZAUGARRIAK</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Ezaugarria</th>
-                    <th>Balioa</th>
-                </tr>
-            </thead>
-            <tbody id="fichaEzaugarriakGorputza">
-            </tbody>
-        </table>
-
-        <!-- OINARRIZKO GAITASUNAK -->
-        <h3 class="sekzio-titulua">OINARRIZKO GAITASUNAK (Hasierako balioa: Ezaugarria × 2)</h3>
-        <div class="gaitasun-azpititulua">
-            Mailen bonuak eta kategoriak: 
-            <strong>1-2 mailak (Hasiberria):</strong> +15 lehenengoak, +10 bigarrenak | 
-            <strong>3-5 mailak (Eskarmentatua):</strong> +10 bakoitza | 
-            <strong>6-7 mailak (Aditua):</strong> +5 bakoitza
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Gaitasuna</th>
-                    <th>Lotutako Ezaugarria</th>
-                    <th>Mailak (1tik 7ra)</th>
-                    <th>Balio Totala</th>
-                </tr>
-            </thead>
-            <tbody id="fichaOinarrizkoGaitasunakGorputza">
-            </tbody>
-        </table>
-
-        <!-- GAITASUN PROFESIONALAK ETA BESTELAKOAK -->
-        <h3 class="sekzio-titulua">BESTELAKO GAITASUNAK (Jatorrizkoak)</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Gaitasuna</th>
-                    <th>Lotutako Ezaugarria</th>
-                    <th>Mailak (1tik 7ra)</th>
-                    <th>Balio Totala</th>
-                </tr>
-            </thead>
-            <tbody id="fichaBestelakoGaitasunakGorputza">
-            </tbody>
-        </table>
-
-        <!-- DOHAINAK -->
-        <h3 class="sekzio-titulua">DOHAINAK</h3>
-        <div class="dohain-kutxa">
-            <div class="dohain-izena" id="dohainIzenaLeinua">—</div>
-            <div class="dohain-deskribapena" id="dohainDeskribapenaLeinua">
-                Aukeratu leinu bat dohaia hemen agertzeko.
-            </div>
-        </div>
-        <div class="dohain-kutxa">
-            <div class="dohain-izena" id="dohainIzenaJatorria">—</div>
-            <div class="dohain-deskribapena" id="dohainDeskribapenaJatorria">
-                Aukeratu jatorri bat dohaia hemen agertzeko.
-            </div>
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================
+<!-- =========================
          JAVASCRIPT
-    ========================= -->
+     ========================= -->
     <script>
         const ezaugarriak = [
             "Sendotasuna", "Trebezia", "Bizkortasuna", 
@@ -823,6 +339,27 @@
             pasuaAldatu(3);
         });
 
+        function dohaiaEguneratu() {
+            const dohainIzenaLeinua = document.getElementById("dohainIzenaLeinua");
+            const dohainDeskribapenaLeinua = document.getElementById("dohainDeskribapenaLeinua");
+            
+            const leinuDohainak = {
+                Elfoa: { izena: "Berraragiztatze Zikloa", desk: "Elfoak bere iraganeko bizitzetako oroitzapen tarteka berragertzen zaizkio, egoera kritikoetan abantaila emanez." },
+                Gizakia: { izena: "Moldakortasuna", desk: "Gizakiek gaitasun berriak ikasteko erraztasun berezia dute." },
+                Ipotxa: { izena: "Harriaren Senitartekoa", desk: "Harri eta mineralekin lan egiterakoan eta haien azpian orientatzeko orduan gaitasun berezia dute." },
+                Jentila: { izena: "Arima Zaharra", desk: "Naturarekiko eta antzinako jakinduriekiko lotura sakona mantentzen dute." },
+                Ertaina: { izena: "Zorte Ona", desk: "Egoera arriskutsuetan zorte miragarria izateko joera dute." }
+            };
+
+            if (hautatutakoLeinua && leinuDohainak[hautatutakoLeinua]) {
+                dohainIzenaLeinua.textContent = leinuDohainak[hautatutakoLeinua].izena;
+                dohainDeskribapenaLeinua.textContent = leinuDohainak[hautatutakoLeinua].desk;
+            } else {
+                dohainIzenaLeinua.textContent = "—";
+                dohainDeskribapenaLeinua.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
+            }
+        }
+
 
         /* PERTSONAIA ORRIA EGUNERATU */
         function pertsonaiaEguneratu() {
@@ -830,13 +367,14 @@
             fichaTaula.innerHTML = "";
 
             for (let i = 0; i < ezaugarriak.length; i++) {
+                const balioa = balioak[i] !== undefined ? balioak[i] : "—";
                 const aldatuta = (balioak[i] !== jatorrizkoBalioak[i]);
                 const estiloa = aldatuta ? 'color: #27ae60; font-weight: bold;' : '';
 
                 fichaTaula.innerHTML += `
                     <tr>
                         <td>${ezaugarriak[i]}</td>
-                        <td><strong style="${estiloa}">${balioak[i]}</strong></td>
+                        <td><strong style="${estiloa}">${balioa}</strong></td>
                     </tr>
                 `;
             }
@@ -847,7 +385,7 @@
             if (balioak.length > 0) {
                 oinarrizkoGaitasunakZerrenda.forEach((gaitasuna, index) => {
                     const ezaugarriIndizea = ezaugarriLaburdurak[gaitasuna.ezaugarria] !== undefined ? ezaugarriLaburdurak[gaitasuna.ezaugarria] : 6; 
-                    const ezaugarriBalioa = balioak[ezaugarriIndizea];
+                    const ezaugarriBalioa = balioak[ezaugarriIndizea] || 0;
                     
                     let balioTotala = ezaugarriBalioa * 2;
                     const mailaKopurua = lortutakoGaitasunMailak[index] || 0;
@@ -861,15 +399,15 @@
 
                     let karratuakHTML = `<div class="maila-karratuak">`;
                     for (let m = 1; m <= 7; m++) {
-                        const betetaClass = m <= mailaKopurua ? "beteta" : "";
-                        karratuakHTML += `<span class="maila-karratua ${betetaClass}" title="${m}. Maila"></span>`;
+                        const beteta = m <= mailaKopurua ? "beteta" : "";
+                        karratuakHTML += `<span class="maila-karratua ${beteta}"></span>`;
                     }
                     karratuakHTML += `</div>`;
 
                     oinarrizkoTaula.innerHTML += `
                         <tr>
                             <td>${gaitasuna.izena}</td>
-                            <td>${ezaugarriak[ezaugarriIndizea]} (${gaitasuna.ezaugarria})</td>
+                            <td>${gaitasuna.ezaugarria}</td>
                             <td>${karratuakHTML}</td>
                             <td><strong>${balioTotala}</strong></td>
                         </tr>
@@ -877,72 +415,30 @@
                 });
             }
 
-            // BESTELAKO GAITASUNAK (JATORRIZKOAK) EGUNERATU
+            // Bestelako gaitasunak kargatu jatorritik baldin baditu
             const bestelakoTaula = document.getElementById("fichaBestelakoGaitasunakGorputza");
             bestelakoTaula.innerHTML = "";
 
             if (hautatutakoJatorriaObj && hautatutakoJatorriaObj.bestelakoGaitasunak) {
-                hautatutakoJatorriaObj.bestelakoGaitasunak.forEach(gaitasuna => {
-                    const ezaugarriIndizea = ezaugarriLaburdurak[gaitasuna.ezaugarria] !== undefined ? ezaugarriLaburdurak[gaitasuna.ezaugarria] : 5;
-                    const ezaugarriBalioa = balioak[ezaugarriIndizea];
-
-                    let balioTotala = ezaugarriBalioa * 2;
-                    const mailaKopurua = gaitasuna.maila;
-
-                    for (let m = 1; m <= mailaKopurua; m++) {
-                        if (m === 1) balioTotala += 15;
-                        else if (m === 2) balioTotala += 10;
-                        else if (m >= 3 && m <= 5) balioTotala += 10;
-                        else if (m >= 6 && m <= 7) balioTotala += 5;
-                    }
-
+                hautatutakoJatorriaObj.bestelakoGaitasunak.forEach((bg) => {
+                    let balioTotala = 0;
+                    // Hemen kalkulua egokitu dezakezu behar izanez gero
                     let karratuakHTML = `<div class="maila-karratuak">`;
                     for (let m = 1; m <= 7; m++) {
-                        const betetaClass = m <= mailaKopurua ? "beteta" : "";
-                        karratuakHTML += `<span class="maila-karratua ${betetaClass}" title="${m}. Maila"></span>`;
+                        const beteta = m <= bg.maila ? "beteta" : "";
+                        karratuakHTML += `<span class="maila-karratua ${beteta}"></span>`;
                     }
                     karratuakHTML += `</div>`;
 
                     bestelakoTaula.innerHTML += `
                         <tr>
-                            <td>${gaitasuna.izena}</td>
-                            <td>${ezaugarriak[ezaugarriIndizea]} (${gaitasuna.ezaugarria})</td>
+                            <td>${bg.izena}</td>
+                            <td>${bg.ezaugarria}</td>
                             <td>${karratuakHTML}</td>
-                            <td><strong>${balioTotala}</strong></td>
+                            <td><strong>${bg.maila * 5}</strong></td>
                         </tr>
                     `;
                 });
-            } else {
-                bestelakoTaula.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #777;">Aukeratu jatorri bat gaitasun profesional eta bereziak ikusteko.</td></tr>`;
-            }
-        }
-
-
-        /* DOHAINAK (LEINUA) */
-        function dohaiaEguneratu() {
-            const izena = document.getElementById("dohainIzenaLeinua");
-            const deskribapena = document.getElementById("dohainDeskribapenaLeinua");
-
-            if (hautatutakoLeinua === "Elfoa") {
-                izena.textContent = "Berraragiztatzea (Leinua)";
-                deskribapena.textContent = "Kostua: EP 1. Egunean behin\nElfoek...";
-            } else if (hautatutakoLeinua === "Gizakia") {
-                izena.textContent = "Ageriko Patua";
-                deskribapena.textContent = "Kostua: ZP 1. Egunean behin\nGizakiak mundua menderatzeko jaio dira. Zure hurrengo proban zuzeneko arrakasta lortuko duzu.";
-            } else if (hautatutakoLeinua === "Ertaina") {
-                izena.textContent = "Zori Ebasleak";
-                deskribapena.textContent = "Kostua: UP 1. Saio bakoitzean behin.\nAdiskide baten ZP 1 lapurtzen duzu. Momentuan erabili beharko duzu.";
-            } else if (hautatutakoLeinua === "Jentila") {
-                izena.textContent = "Ustela";
-                deskribapena.textContent = "Kostua: Ekintza bat / Pasiboa\nJentilen ondare ilunak ingurukoen izpiritua edo morala ahultzen du. Egoera jakin batzuetan etsaien ekintzak baldintzatzeko balio du.";
-            } else if (hautatutakoLeinua === "Ipotxa") {
-                izena.textContent = "Nekaezina";
-                deskribapena.textContent = "Kostua: Pasiboa / Nekea murrizteko\nIpotxek egindako gorputz-ahalegin luzeek ez dute horrenbeste zigortzen. Nekea metatzean hobeto eusten diote lanari edo martxari.";
-            } else {
-                izena.textContent = "—";
-                deskribapena.textContent = "Aukeratu leinu bat dohaia hemen agertzeko.";
             }
         }
     </script>
-</body>
-</html>
