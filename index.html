@@ -243,6 +243,7 @@
             border: 1px solid #333;
             padding: 20px;
             background-color: #f9f9f9;
+            margin-bottom: 15px;
         }
 
         .dohain-izena {
@@ -386,7 +387,7 @@
 
         <h2>ILGORA - PERTSONAIA</h2>
 
-        <div class="ficha-goiburua" style="grid-template-columns: 1fr 1fr;">
+        <div class="ficha-goiburua" style="grid-template-columns: 1fr 1fr 1fr;">
             <div class="kutxa">
                 <div class="kutxa-izenburua">LEINUA</div>
                 <div class="kutxa-balioa" id="fichaLeinua">—</div>
@@ -395,7 +396,7 @@
                 <div class="kutxa-izenburua">JATORRIA</div>
                 <div class="kutxa-balioa" id="fichaJatorria">—</div>
             </div>
-        <div class="kutxa">
+            <div class="kutxa">
                 <div class="kutxa-izenburua">ESTATUSA</div>
                 <div class="kutxa-balioa" id="fichaEstatusa">—</div>
             </div>
@@ -494,7 +495,6 @@
             { izena: "ZORROZTASUNA", ezaugarria: "ADI" }
         ];
 
-        // Gaitasun profesional  batzuk
         const gaitasunProfesionalakZerrenda = [
             { izena: "ERREGUTU", ezaugarria: "BOT" },
             { izena: "NABIGAZIOA", ezaugarria: "HAU" },
@@ -518,23 +518,22 @@
             { izena: "BASHA", ezaugarria: "KAR" },
             { izena: "MULDI", ezaugarria: "KAR" }
         ];
-        
 
-        // Jatorrien zerrenda eta haiei dagozkien leinu baliagarriak (Leinu baldintzak)
         const jatorriakZerrenda = [
             {
                 izena: "Diaspora Eleshita",
-                baliozkoLeinuak: ["Ertaina"], // Adibidez, hau soilik ertinentzat
+                baliozkoLeinuak: ["Ertaina"],
                 estatusa: "Oparoa",
                 deskribapena: "Uda Hirietan eleshiten merkataritza etxe handiek negozio guztiak bereganatu dituzte. Honen aurrean, familia aberatsen bigarren seme-alaba askok, hiri-estatuak utzi eta Vasantara bidaiatzen dute negozio aukera berrien bila. Erresuma Ertainetako hiri gehienetan, banku, diru-mailegu eta merkataritzan diharduten komunitate eleshita oparo bat aurkitu daiteke. Bere baliabideak direla eta, noblezia eta bertako burgesekin lotura sendoak dituzte eta eragin politiko handiko etorkinak dira.",
                 dohainak: [
                     { izena: "Malkarrak Zelaitzen", deskribapena: "Kostua: Istorian behin.<br> Diruak malkarrak zelaitzen omen ditu. Zuk aukeratutako eta etsaia ez den PEJ oparo edo boteretsu baten jarrera +30 aldatzen da." },
                     { izena: "Uda Hirietako Sendia", deskribapena: "Kostua: Istorian behin.<br> Istorian behin Uda Hirietako merkatal famili handiekin lotura duen PEJ bat probarik egin gabe sortu ahalko duzu." }
                 ],
-                gaitasunak: { oinarrizkoak: { "ARTISAUTZA": 1 ,"IRUZUR EGIN": 1,"ZORROZTASUNA": 1,"MERKATARITZA": 2 }, 
-                            profesionalak: {"OHITURAK ELESHITAK": 4, "OHITURAK ERRESUMA ERTAINAK": 2, "JAKITURIA LEGEAK": 1 }
+                gaitasunak: { 
+                    oinarrizkoak: { "ARTISAUTZA": 1 ,"IRUZUR EGIN": 1,"ZORROZTASUNA": 1,"MERKATARITZA": 2 }, 
+                    profesionalak: {"OHITURAK ELESHITAK": 4, "OHITURAK ERRESUMA ERTAINAK": 2, "JAKITURIA LEGEAK": 1 }
+                }
             }
-            // Hemen beste jatorri batzuk gehitu litezke, adibidez: { izena: "Beste Jatorri Bat", baliozkoLeinuak: ["Gizakia", "Ertaina"], deskribapena: "..." }
         ];
 
         let balioak = [];
@@ -620,7 +619,6 @@
             pertsonaiaEguneratu();
             jatorriAukeraketaEguneratu(); 
             
-            // Leinua aldatzean, jatorria garbitu
             hautatutakoJatorria = "";
             hautatutakoEstatusa = "";
             hautatutakoJatorriDohaina = "";
@@ -740,7 +738,6 @@
             pasuaAldatu(1);
         });
 
-
         /* 3. PAUSOA: JATORRIAK ETA LEINU BALDINTZAK */
         const jatorriSelect = document.getElementById("jatorriSelect");
         const dohainSelect = document.getElementById("dohainSelect");
@@ -751,7 +748,6 @@
             let aukeragarriakDaude = false;
 
             jatorriakZerrenda.forEach(jatorria => {
-                // Egiaztatu ea hautatutako leinua jatorri honen baliozko leinuen artean dagoen
                 if (jatorria.baliozkoLeinuak.includes(hautatutakoLeinua)) {
                     jatorriSelect.innerHTML += `<option value="${jatorria.izena}">${jatorria.izena}</option>`;
                     aukeragarriakDaude = true;
@@ -760,12 +756,11 @@
 
             const oharra = document.getElementById("jatorriBaldintzaOharra");
             if (!aukeragarriakDaude) {
-                oharra.textContent = `Adi: Hautatutako leinuarentzat (${hautatutakoLeinua}) ez dago oraingoz jatorri bateragarririk.`;
+                oharra.textContent = `Adi: Hautatutako leinuarentzat (${hautatutakoLeinua || "Ezein"}) ez dago oraingoz jatorri bateragarririk.`;
             } else {
                 oharra.textContent = "";
             }
 
-            // Hautatuta zegoen jatorria baliogabea bihurtu bada, garbitu
             if (!jatorriSelect.querySelector(`option[value="${hautatutakoJatorria}"]`)) {
                 hautatutakoJatorria = "";
                 document.getElementById("fichaJatorria").textContent = "—";
@@ -782,22 +777,20 @@
             const dohainKutxaDiv = document.getElementById("jatorriDohainAukera");
             const aurkitutakoa = jatorriakZerrenda.find(j => j.izena === hautatutakoJatorria);
 
-          if (aurkitutakoa) {
+            if (aurkitutakoa) {
                 deskKutxa.style.display = "block";
                 deskKutxa.textContent = aurkitutakoa.deskribapena;
                 
                 hautatutakoEstatusa = aurkitutakoa.estatusa;
                 document.getElementById("fichaEstatusa").textContent = hautatutakoEstatusa;
 
-                // Dohainak bete
                 dohainSelect.innerHTML = `<option value="">Aukeratu dohaia</option>`;
                 aurkitutakoa.dohainak.forEach((d, idx) => {
                     dohainSelect.innerHTML += `<option value="${idx}">${d.izena}</option>`;
                 });
                 dohainKutxaDiv.style.display = "block";
 
-                // Gaitasunak ezarri
-                jatorriGaitasunMailak = aurkitutakoa.gaitasunak;
+                jatorriGaitasunMailak = aurkitutakoa.gaitasunak || { oinarrizkoak: {}, profesionalak: {} };
             } else {
                 deskKutxa.style.display = "none";
                 deskKutxa.textContent = "";
@@ -824,7 +817,7 @@
                 
                 document.getElementById("jatorriDohainKutxa").style.display = "block";
                 document.getElementById("jatorriDohainIzena").textContent = hautatutakoJatorriDohaina;
-                document.getElementById("jatorriDohainDeskribapena").textContent = hautatutakoJatorriDohainObj.deskribapena;
+                document.getElementById("jatorriDohainDeskribapena").innerHTML = hautatutakoJatorriDohainObj.deskribapena;
                 
                 document.getElementById("hurrengoa3").style.display = "inline-block";
             } else {
@@ -848,39 +841,31 @@
             pasuaAldatu(3);
         });
 
-
         /* PERTSONAIA ORRIA EGUNERATU */
+        function kalkulatuBonua(mailaKopurua) {
+            let bonua = 0;
+            if (mailaKopurua >= 1) bonua += 15;
+            if (mailaKopurua > 1) bonua += (Math.min(mailaKopurua, 5) - 1) * 10;
+            if (mailaKopurua > 5) bonua += (mailaKopurua - 5) * 5;
+            return bonua;
+        }
+
         function pertsonaiaEguneratu() {
             const fichaTaula = document.getElementById("fichaEzaugarriakGorputza");
             fichaTaula.innerHTML = "";
 
             for (let i = 0; i < ezaugarriak.length; i++) {
-                const aldatuta = (balioak[i] !== jatorrizkoBalioak[i]);
+                const balioa = balioak[i] !== undefined ? balioak[i] : "—";
+                const aldatuta = (balioak[i] !== undefined && balioak[i] !== jatorrizkoBalioak[i]);
                 const estiloa = aldatuta ? 'color: #27ae60; font-weight: bold;' : '';
 
                 fichaTaula.innerHTML += `
                     <tr>
                         <td>${ezaugarriak[i]}</td>
-                        <td><strong style="${estiloa}">${balioak[i]}</strong></td>
+                        <td><strong style="${estiloa}">${balioa}</strong></td>
                     </tr>
                 `;
             }
-
-            function kalkulatuBonua(mailaKopurua) {
-    let bonua = 0;
-    if (mailaKopurua >= 1) {
-        bonua += 15; // 1. maila
-    }
-    if (mailaKopurua > 1) {
-        let maila2tik5 = Math.min(mailaKopurua, 5) - 1;
-        bonua += maila2tik5 * 10; // 2. mailatik 5. mailara (bakoitza +10)
-    }
-    if (mailaKopurua > 5) {
-        let maila6tik7 = mailaKopurua - 5;
-        bonua += maila6tik7 * 5; // 6. mailatik 7. mailara (bakoitza +5)
-    }
-    return bonua;
-}
 
             const oinarrizkoTaula = document.getElementById("fichaOinarrizkoGaitasunakGorputza");
             oinarrizkoTaula.innerHTML = "";
@@ -891,14 +876,14 @@
                     const ezaugarriBalioa = balioak[ezaugarriIndizea];
                     const hasierakoBalioa = ezaugarriBalioa * 2;
 
-                    // Jatorriagatik lortutako mailak kalkulatu
-                    let jatorriMaila = jatorriGaitasunMailak.oinarrizkoak[gaitasuna.izena] || 0;
+                    let jatorriMaila = (jatorriGaitasunMailak.oinarrizkoak && jatorriGaitasunMailak.oinarrizkoak[gaitasuna.izena]) || 0;
                     let bonua = kalkulatuBonua(jatorriMaila); 
                     let balioTotala = hasierakoBalioa + bonua;
 
                     let karratuakHTML = `<div class="maila-karratuak">`;
                     for (let m = 1; m <= 7; m++) {
-                        karratuakHTML += `<span class="maila-karratua" title="${m}. Maila"></span>`;
+                        const beteta = m <= jatorriMaila ? "beteta" : "";
+                        karratuakHTML += `<span class="maila-karratua ${beteta}" title="${m}. Maila"></span>`;
                     }
                     karratuakHTML += `</div>`;
 
@@ -907,13 +892,13 @@
                             <td>${gaitasuna.izena}</td>
                             <td>${ezaugarriak[ezaugarriIndizea]} (${gaitasuna.ezaugarria})</td>
                             <td>${karratuakHTML}</td>
-                            <td><strong>${hasierakoBalioa}</strong></td>
+                            <td><strong>${balioTotala}</strong></td>
                         </tr>
                     `;
                 });
             }
-        }
-        const profTaula = document.getElementById("fichaGaitasunProfesionalakGorputza");
+
+            const profTaula = document.getElementById("fichaGaitasunProfesionalakGorputza");
             if (profTaula) {
                 profTaula.innerHTML = "";
                 if (balioak.length > 0 && jatorriGaitasunMailak.profesionalak) {
@@ -944,7 +929,7 @@
                 }
             }
         }
-        
+
         /* DOHAINAK */
         function dohaiaEguneratu() {
             const izena = document.getElementById("dohainIzena");
