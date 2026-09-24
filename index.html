@@ -554,12 +554,13 @@
                 estatusa: function() {
         const dadoa = dadoaJaurti(); // 1d6 botatzen du (1-6)
         if (dadoa <= 4) {
-            return "Arrunta (Dadoa: " + dadoa + ")"; // Edo nahi baduzu "Arrunta" bakarrik
+            return "Arrunta")"; // Edo nahi baduzu "Arrunta" bakarrik
         } else {
-            return "Oparoa (Dadoa: " + dadoa + ")";
+            return "Oparoa")";
         }
     },
                 deskribapena: "Azken aroan, Erresuma Ertainek Barne Itsasoa bezatzea lortu dute. Beste kontinenteekin harremanak handituz eta beste behin ere, merkataritza indartuz doa. Urrea bueltan da eta honekin batera artisau, burges eta merkatariak. Baina ez dira bakarrak. Hirien luxu eta distira honek itzalak sortzen ditu, eta kale estu eta zikinetan, urdangak, fanatikoak eta arloteak biderkatu dira.",
+                <div id="dadoEmaitzaOharra" style="display:none; margin-top: 10px; padding: 10px; background-color: #e8f4f8; border: 1px solid #2980b9; font-weight: bold;"></div>
                 dohainak: [
                     { izena: "Kuxkuxeroa", deskribapena: "Kostua: Gogo 1, hiri edo auzo bakoitzeko behin.<br> Zauden hiriko Sekretu, Arrisku edo Zurrumurru bat entzuten duzu." },
                     { izena: "Kalekumea", deskribapena: "Kostua: 2 Gogo, saioan behin.<br> Hirian egin beharreko gaitasun proba bat zure Ohitura gaitasunarekin ebatzi dezakezu." }
@@ -567,6 +568,28 @@
                 gaitasunak: { 
                     oinarrizkoak: { "ARRETA": 1 ,"IRUZUR EGIN": 1,"ERAGINA": 1,"ISILTASUNA": 1,"KALE EZAGUTZA": 1,"MERKATARITZA": 1 }, 
                     profesionalak: {"OHITURAK ERRESUMA ERTAINAK": 5 }
+                }
+            },
+                        {
+                izena: "Erresuma Ertainetako Noblea",
+                baliozkoLeinuak: ["Gizakia"],
+                estatusa: function() {
+        const dadoa = dadoaJaurti(); // 1d6 botatzen du (1-6)
+        if (dadoa <= 4) {
+            return "Oparoa")"; // Edo nahi baduzu "Arrunta" bakarrik
+        } else {
+            return "Boteretsua";
+        }
+    },
+                deskribapena: "Vasantako noblezia gehiengoa Utum Inperioaren basailu-familietatik dator. Inperioa desegitean estamentu pribilegiatu hauek boterea bereganatu zuten, erresumen jaun eta jabe bilakatuz. Jauntxoek, lur sail bat kudeatzetik haratagoko lehentasun, eskubide eta sariak dituzte, izan legeak, zergak, gudak, zigorrak edo gizartearen hainbat ohitura eta tradizioak.",
+                <div id="dadoEmaitzaOharra" style="display:none; margin-top: 10px; padding: 10px; background-color: #e8f4f8; border: 1px solid #2980b9; font-weight: bold;"></div>
+                dohainak: [
+                    { izena: "Gorteko Heziketa", deskribapena: "Kostua: Gogo 1.<br> Zure Estatus Maila baino txikiagoko pertsonekin hitz egitean, Iruzur egin, Eragina edo Zorroztasunaren ordez Ohiturak gaitasuna erabil dezakezu." },
+                    { izena: "Leinu Zaharra", deskribapena: "Kostua: Gogo 1.<br> Estatus Maila Oparo edo Boteretsuko pertsonekin harremantzean, Eragin, Zorroztasun edo Iruzur egin proba errepikatu ahalko duzu." }
+                ],
+                gaitasunak: { 
+                    oinarrizkoak: { "ZALDIA": 1 ,"IRUZUR EGIN": 1,"ERAGINA": 1,"ZORROZTASUNA": 1,"ESKU BATEKO ARMAK": 1,"MERKATARITZA": 1 }, 
+                    profesionalak: {"OHITURAK ERRESUMA ERTAINAK": 5, "JAKITURIA LEGEAK": 1, "JAKITURIA HISTORIA": 1 }
                 }
             },
         ];
@@ -810,6 +833,13 @@
 
             const deskKutxa = document.getElementById("jatorriDeskribapena");
             const dohainKutxaDiv = document.getElementById("jatorriDohainAukera");
+            const oharKutxa = document.getElementById("dadoEmaitzaOharra");
+    oharKutxa.style.display = "block";
+    oharKutxa.innerHTML = `🎲 1d6 Jaurtiketa: <strong>${dadoa}</strong> atera da ➔ Estatusa: <strong>${hautatutakoEstatusa}</strong>`;
+} else {
+    hautatutakoEstatusa = aurkitutakoa.estatusa;
+    document.getElementById("dadoEmaitzaOharra").style.display = "none";
+}
             const aurkitutakoa = jatorriakZerrenda.find(j => j.izena === hautatutakoJatorria);
 
             if (aurkitutakoa) {
